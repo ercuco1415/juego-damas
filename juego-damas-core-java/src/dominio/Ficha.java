@@ -17,55 +17,38 @@ public class Ficha {
 	private String color;
 	private Casillero casillero;
 	private Jugador jugador;
-	
-	
 	public Jugador getJugador() {
 		return jugador;
 	}
-
-
 	public void setJugador(Jugador jugador) {
 		this.jugador = jugador;
 	}
-
-
 	public boolean sosDelContrario(Jugador jugador){
 		if(!jugador.equals(this.jugador)){
 			return true;
 		}
 		return false;
 	}
-
-
 	public Ficha(){
 		this.id = this.hashCode();
 	}
-	
-	
 	@Override
 	public boolean equals(Object obj) {
 		boolean returnboolean = EqualsBuilder.reflectionEquals(this, obj);
 		return returnboolean;
 	}
-
-
 	@Override
 	public int hashCode() {
 		int returnint = HashCodeBuilder.reflectionHashCode(this);
 		return returnint;
 	}
-
-
 	@Override
 	public String toString() {
 		return "COLOR-FICHA: " + this.color + " CASILLERO: " + this.casillero;
 	}
-
-
 	public int getId() {
 		return id;
 	}
-	
 	public String getColor() {
 		return color;
 	}
@@ -75,8 +58,6 @@ public class Ficha {
 	public Casillero getCasillero() {
 		return casillero;
 	}
-
-
 	public void addCasillero(Casillero casillero2) throws CasilleroOcupadoException {
 		if(this.casillero != null && casillero2.isOcupada()){
 			throw new CasilleroOcupadoException("El casillero se encuentra ocupado");
@@ -132,7 +113,6 @@ public class Ficha {
 		casillero.eliminaFicha();
 		return returnCasillero;
 	}
-
 	private boolean esCasilleroDerecha(List<Casillero> casillerosNegros) {
 		List<Casillero> casilleros = casillero.vecinoDiagonalDerecha(casillerosNegros, this.jugador.soyContrincante());
 		if(casilleros != null && !casilleros.isEmpty()){
@@ -140,13 +120,18 @@ public class Ficha {
 		}
 		return false;
 	}
-
 	public void eliminate() {
 		this.jugador.getFichas().remove(this);
 	}
-
-
 	public boolean esDeContrincante() {
 		return this.jugador.soyContrincante();
+	}
+	public boolean isDerechaCasillero(Casillero casilleroSeleccionado) throws NoExisteCasilleroDisponibleException{
+		boolean result=false;
+		if(casilleroSeleccionado.isOcupada() && !casilleroSeleccionado.ficha.jugador.equals(this.jugador)){
+			Casillero miCasillero = casilleroSeleccionado.ficha.dameCasilleroDerecha(this.jugador.getTablero().getNegros());
+			result = this.casillero.equals(miCasillero);
+		}
+		return result;
 	}
 }
