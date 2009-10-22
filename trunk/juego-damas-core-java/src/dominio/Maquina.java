@@ -5,13 +5,13 @@ import java.util.List;
 
 import excepciones.CasilleroOcupadoException;
 
-public class JugadorMaquina  extends AbstractJugador{
+public class Maquina  extends Jugador{
 
 	private static final String BLANCO = "BLANCO";
 	
 	
 	
-	public JugadorMaquina(){
+	public Maquina(){
 		this.nombre = "MAQUINA";
 	}
 	public void poneFichas(List<Casillero> casillerosNegros){

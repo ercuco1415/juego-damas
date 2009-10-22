@@ -16,20 +16,20 @@ public class Ficha {
 	private int id;
 	private String color;
 	private Casillero casillero;
-	private AbstractJugador jugador;
+	private Jugador jugador;
 	
 	
-	public AbstractJugador getJugador() {
+	public Jugador getJugador() {
 		return jugador;
 	}
 
 
-	public void setJugador(AbstractJugador jugador) {
+	public void setJugador(Jugador jugador) {
 		this.jugador = jugador;
 	}
 
 
-	public boolean sosDelContrario(AbstractJugador jugador){
+	public boolean sosDelContrario(Jugador jugador){
 		if(!jugador.equals(this.jugador)){
 			return true;
 		}

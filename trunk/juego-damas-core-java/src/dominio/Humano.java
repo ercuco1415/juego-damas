@@ -7,11 +7,11 @@ import org.apache.commons.collections.CollectionUtils;
 
 import excepciones.CasilleroOcupadoException;
 
-public class JugadorHumano  extends AbstractJugador{
+public class Humano  extends Jugador{
 
 	private static final String NEGRO = "NEGRO";
 	
-	public JugadorHumano(){
+	public Humano(){
 		this.nombre = "CHOMA";
 	}
 	public void poneFichas(List<Casillero> casillerosNegros){
