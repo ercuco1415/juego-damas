@@ -5,8 +5,8 @@ import org.junit.Before;
 public class AbstractTestJugar {
 
 	protected Tablero tablero = new Tablero();
-	protected AbstractJugador jugadorMaquina = new JugadorMaquina();
-	protected AbstractJugador jugadorHumano = new JugadorHumano();
+	protected Jugador jugadorMaquina = new Maquina();
+	protected Jugador jugadorHumano = new Humano();
 	@Before
 	public void setUp() throws Exception {
 		jugadorMaquina.poneFichas(tablero.getNegros());

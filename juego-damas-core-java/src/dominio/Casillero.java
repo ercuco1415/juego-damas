@@ -55,7 +55,7 @@ public abstract class Casillero {
 	public void setY(int y) {
 		this.y = y;
 	}
-	public boolean tenesFichaContrario(AbstractJugador jugador) {
+	public boolean tenesFichaContrario(Jugador jugador) {
 		if(!this.isOcupada()){
 			return false;
 		}

@@ -9,7 +9,7 @@ import org.apache.commons.collections.Predicate;
 import excepciones.NoHayFichaEnCasilleroException;
 
 
-public abstract class AbstractJugador {
+public abstract class Jugador {
 	protected String nombre;
 	protected int puntajeTotal;
 	protected boolean finalizoJuego=false;
@@ -20,7 +20,7 @@ public abstract class AbstractJugador {
 	public List<Ficha> getFichas() {
 		return fichas;
 	}
-	public void agregarJugador(AbstractJugador jugador) {
+	public void agregarJugador(Jugador jugador) {
 		contrincante = jugador;
 	}
 	public void tenesTurno(){
@@ -31,7 +31,7 @@ public abstract class AbstractJugador {
 		this.esperaTurno();
 		this.contrincante.tieneTurno();
 	}
-	private AbstractJugador contrincante;
+	private Jugador contrincante;
 	public Ficha dameFicha(Casillero casillero) throws NoHayFichaEnCasilleroException{
 		PredicateFicha predicado = new PredicateFicha();
 		predicado.x = casillero.getX();
