@@ -1,5 +1,6 @@
 package dominio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -67,6 +68,9 @@ public class Ficha {
 	}
 	public List<Casillero> dameCasillerosDisponibles(List<Casillero> casilleros){
 		return this.casillero.getVecinos(this,casilleros);
+	}
+	public List<Casillero> dameCasillerosDisponibles(){
+		return this.casillero.getCasillerosDisponibles();
 	}
 	public Casillero dameCasilleroDerecha( List<Casillero> casillerosNegros) throws NoExisteCasilleroDisponibleException{
 		List<Casillero> casilleros = this.casillero.vecinoDiagonalDerecha(casillerosNegros, this.jugador.soyContrincante());

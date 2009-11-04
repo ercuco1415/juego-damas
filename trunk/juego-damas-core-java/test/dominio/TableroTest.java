@@ -36,7 +36,7 @@ public class TableroTest extends AbstractTestJugar{
 		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles(tablero.getNegros()).get(0));
 		ficha.movete(ficha.dameCasillerosDisponibles(tablero.getNegros()).get(0));
 		System.out.println("ficha movida" + ficha);
-		System.out.println(tablero.getNegros());
+		System.out.println("casilleros libres: " + ficha.dameCasillerosDisponibles());
 	}
 	
 	@Test
