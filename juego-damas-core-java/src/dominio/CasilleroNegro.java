@@ -23,6 +23,17 @@ public class CasilleroNegro extends Casillero {
 				.getColor().equals(BLANCO)));
 		return casilleros;
 	}
+	
+	public List<Casillero> getCasillerosDisponibles(){
+		List<Casillero> casillerosList = new ArrayList<Casillero>();
+		if(this.ficha != null ){
+			casillerosList.addAll(vecinoDiagonalDerecha(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+			casillerosList.addAll(vecinoDiagonalDerechaAtras(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+			casillerosList.addAll(vecinoDiagonalIzquierdaAtras(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+			casillerosList.addAll(vecinoDiagonalIzquierda(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+		}
+		return casillerosList;
+	}
 	public List<Casillero> vecinoDiagonalDerecha(
 			List<Casillero> casillerosNegros, boolean soyContrincante) {
 

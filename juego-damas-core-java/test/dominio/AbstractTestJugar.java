@@ -13,6 +13,8 @@ public class AbstractTestJugar {
 		jugadorHumano.poneFichas(tablero.getNegros());
 		jugadorMaquina.agregarJugador(jugadorHumano);
 		jugadorHumano.agregarJugador(jugadorMaquina);
+		jugadorMaquina.setTablero(tablero);
+		jugadorHumano.setTablero(tablero);
 		jugadorMaquina.tenesTurno();
 	}
 

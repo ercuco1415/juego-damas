@@ -41,4 +41,9 @@ public class CasilleroBlanco extends Casillero {
 			List<Casillero> casillerosNegros, boolean soyContrincante) {
 		throw new UnsupportedOperationException("under construction");
 	}
+
+	@Override
+	public List<Casillero> getCasillerosDisponibles() {
+		throw new UnsupportedOperationException("under construction");
+	}
 }

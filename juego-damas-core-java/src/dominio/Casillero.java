@@ -23,6 +23,7 @@ public abstract class Casillero {
 	public abstract List<Casillero> vecinoDiagonalIzquierda(List<Casillero> casillerosNegros, boolean soyContrincante);
 	public abstract List<Casillero> vecinoDiagonalDerechaAtras(List<Casillero> casillerosNegros, boolean soyContrincante);
 	public abstract List<Casillero> vecinoDiagonalIzquierdaAtras(List<Casillero> casillerosNegros, boolean soyContrincante);
+	public abstract List<Casillero> getCasillerosDisponibles();
 	@Override
 	public boolean equals(Object obj) {
 		boolean returnboolean = EqualsBuilder.reflectionEquals(this, obj);
@@ -37,7 +38,7 @@ public abstract class Casillero {
 
 	@Override
 	public String toString() {
-		return "COLOR-CASILLERO:" + getType() + " X: " + this.x + "Y:" + this.y;
+		return "x" + this.x + "y" + this.y;
 	}
 	public abstract List<Casillero> getVecinos(Ficha ficha,List<Casillero> casillerosNegros);
 	public void setVecinos(List<Casillero> vecinos) {
