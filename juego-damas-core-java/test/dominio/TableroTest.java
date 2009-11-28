@@ -22,9 +22,10 @@ public class TableroTest extends AbstractTestJugar{
 	public  void moverFicha() throws CasilleroOcupadoException{
 		Ficha ficha =jugadorMaquina.getFichas().get(jugadorMaquina.getFichas().size()-1);
 		System.out.println("casillero anterior: " + ficha.getCasillero());
-		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles(tablero.getNegros()).get(0));
-		ficha.movete(ficha.dameCasillerosDisponibles(tablero.getNegros()).get(0));
-		System.out.println("ficha movida" + ficha);
+		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles());
+		ficha.movete(ficha.dameCasillerosDisponibles().get(0));
+		System.out.println("ficha movida: " + ficha);
+		System.out.println("casillero movido: "  + ficha.getCasillero());
 		System.out.println(tablero.getNegros());
 		jugadorMaquina.finTurno();
 		
@@ -33,8 +34,8 @@ public class TableroTest extends AbstractTestJugar{
 	public void mostrarCasillerosLibres() throws CasilleroOcupadoException{
 		Ficha ficha =jugadorMaquina.getFichas().get(jugadorMaquina.getFichas().size()-1);
 		System.out.println("casillero anterior: " + ficha.getCasillero());
-		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles(tablero.getNegros()).get(0));
-		ficha.movete(ficha.dameCasillerosDisponibles(tablero.getNegros()).get(0));
+		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles().get(0));
+		ficha.movete(ficha.dameCasillerosDisponibles().get(0));
 		System.out.println("ficha movida" + ficha);
 		System.out.println("casilleros libres: " + ficha.dameCasillerosDisponibles());
 	}
@@ -46,20 +47,20 @@ public class TableroTest extends AbstractTestJugar{
 		casillero.y = 3;
 		Ficha ficha =jugadorMaquina.dameFicha(casillero );
 		System.out.println("casillero anterior: " + ficha.getCasillero());
-		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles(tablero.getNegros()).get(0));
-		ficha.movete(ficha.dameCasilleroDerecha(tablero.getNegros()));
-		System.out.println("ficha movida" + ficha);
-		System.out.println(tablero.getNegros());
+		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles().get(0));
+		ficha.movete(ficha.dameCasilleroDerecha());
+		System.out.println("ficha movida: " + ficha);
+		System.out.println("casillero movida: " + ficha.getCasillero());
 		jugadorMaquina.finTurno();
 		
 		casillero.x = 6;
 		casillero.y = 8;
 		ficha =jugadorHumano.dameFicha(casillero);
 		System.out.println("casillero anterior: " + ficha.getCasillero());
-		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles(tablero.getNegros()).get(0));
-		ficha.movete(ficha.dameCasilleroDerecha(tablero.getNegros()));
-		System.out.println("ficha movida" + ficha);
-		System.out.println(tablero.getNegros());
+		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles().get(0));
+		ficha.movete(ficha.dameCasilleroDerecha());
+		System.out.println("ficha movida: " + ficha);
+		System.out.println("casillero movida: " + ficha.getCasillero());
 		jugadorHumano.finTurno();
 		
 		
@@ -67,9 +68,10 @@ public class TableroTest extends AbstractTestJugar{
 		casillero.y = 4;
 		ficha =jugadorMaquina.dameFicha(casillero );
 		System.out.println("casillero anterior: " + ficha.getCasillero());
-		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles(tablero.getNegros()).get(0));
-		ficha.movete(ficha.dameCasilleroDerecha(tablero.getNegros()));
-		System.out.println("ficha movida" + ficha);
+		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles().get(0));
+		ficha.movete(ficha.dameCasilleroDerecha());
+		System.out.println("ficha movida:" + ficha);
+		System.out.println("casillero movida: " + ficha.getCasillero());
 		System.out.println(tablero.getNegros());
 		jugadorMaquina.finTurno();
 		
@@ -77,20 +79,21 @@ public class TableroTest extends AbstractTestJugar{
 		casillero.y = 7;
 		ficha =jugadorHumano.dameFicha(casillero);
 		System.out.println("casillero anterior: " + ficha.getCasillero());
-		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles(tablero.getNegros()).get(0));
-		ficha.movete(ficha.dameCasilleroDerecha(tablero.getNegros()));
+		System.out.println("casillero a mover: " + ficha.dameCasillerosDisponibles().get(0));
+		ficha.movete(ficha.dameCasilleroDerecha());
 		System.out.println("ficha movida" + ficha);
+		System.out.println("casillero movida: " + ficha.getCasillero());
 		System.out.println(tablero.getNegros());
 		jugadorHumano.finTurno();
 		
 		casillero.x = 3;
 		casillero.y = 5;
 		ficha =jugadorMaquina.dameFicha(casillero );
-		Casillero casilleroContrincante = ficha.dameCasilleroDerecha(tablero.getNegros());
+		Casillero casilleroContrincante = ficha.dameCasilleroDerecha();
 		System.out.println("FICHA CONTRINCANTE: " + casilleroContrincante.ficha);
-		ficha.comeFicha(casilleroContrincante,tablero.getNegros());
+		ficha.comeFicha(casilleroContrincante);
 		System.out.println("FICHAS HUMANO: " + jugadorHumano.getFichas().size());
-		System.out.println(casilleroContrincante.ficha);
+		System.out.println("ficha del casillero: " + casilleroContrincante.ficha);
 		jugadorMaquina.finTurno();
 	}
 	
