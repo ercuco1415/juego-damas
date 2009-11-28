@@ -1,0 +1,9 @@
+
+<dwr>
+  <allow>
+    <create creator="new" javascript="JuegoDamas">
+      <param name="class" value="servicio.JuegoDamasListener"/>
+    </create>
+    
+  </allow>
+</dwr>
