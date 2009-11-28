@@ -15,7 +15,6 @@ public class Humano extends Jugador {
 	}
 
 	public Humano() {
-		Ficha.initIds();
 		this.nombre = "CHOMA";
 		setIdEntity(this.getNombre());
 		setEntityType(Humano.class.getName());
@@ -23,13 +22,14 @@ public class Humano extends Jugador {
 	public void agregarJugador(Jugador jugador) {
 		contrincante = (Maquina) jugador;
 	}
-	public void poneFichas(List<Casillero> casillerosNegros) {
+	public void poneFichas(List<CasilleroNegro> casillerosNegros) {
 		try {
+			this.setEntityTypeFicha(FichaNegra.class);
 			Object[] vecCasilleros = casillerosNegros.toArray();
 			fichas = new ArrayList<Ficha>();
 			for (int i = 0; i < 15; i++) {
 				Casillero casillero = (Casillero) vecCasilleros[i];
-				Ficha ficha = new FichaNegra();
+				Ficha ficha = new FichaNegra(i+1);
 				ficha.addCasillero(casillero);
 				ficha.setJugador(this);
 				fichas.add(ficha);

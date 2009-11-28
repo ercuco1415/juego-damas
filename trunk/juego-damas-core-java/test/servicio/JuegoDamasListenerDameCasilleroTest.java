@@ -7,19 +7,7 @@ import servicios.JuegoDamasListener;
 import excepciones.FormatoCasilleroException;
 import excepciones.NoHayFichaEnCasilleroException;
 
-public class JuegoDamasListenerTest {
-
-	@Test
-	public void inicio() throws NoHayFichaEnCasilleroException {
-		JuegoDamasListener damasListener =  new JuegoDamasListener();
-		damasListener.init();
-		
-	}
-
-	@Test
-	public void testBotMueveACasillero() {
-//		fail("Not yet implemented");
-	}
+public class JuegoDamasListenerDameCasilleroTest {
 
 	@Test
 	public void testDameCasillerosDisponibles() throws NoHayFichaEnCasilleroException, FormatoCasilleroException {

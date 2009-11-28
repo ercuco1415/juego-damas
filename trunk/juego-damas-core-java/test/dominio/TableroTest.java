@@ -90,10 +90,10 @@ public class TableroTest extends AbstractTestJugar{
 		casillero.y = 5;
 		ficha =jugadorMaquina.dameFicha(casillero );
 		Casillero casilleroContrincante = ficha.dameCasilleroDerecha();
-		System.out.println("FICHA CONTRINCANTE: " + casilleroContrincante.ficha);
+//		System.out.println("FICHA CONTRINCANTE: " + casilleroContrincante.ficha);
 		ficha.comeFicha(casilleroContrincante);
 		System.out.println("FICHAS HUMANO: " + jugadorHumano.getFichas().size());
-		System.out.println("ficha del casillero: " + casilleroContrincante.ficha);
+//		System.out.println("ficha del casillero: " + casilleroContrincante.ficha);
 		jugadorMaquina.finTurno();
 	}
 	

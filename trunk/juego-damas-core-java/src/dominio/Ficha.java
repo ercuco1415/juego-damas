@@ -2,6 +2,8 @@ package dominio;
 
 import java.util.List;
 
+import servicios.ObjectPersistenceService;
+
 import excepciones.CasilleroOcupadoException;
 import excepciones.NoExisteCasilleroDisponibleException;
 import excepciones.NoPuedoComerFichaException;
@@ -18,18 +20,12 @@ public abstract class Ficha extends Entidad{
 	private String color;
 	private Casillero casillero;
 	private Jugador jugador;
-	
+	private ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
 	public void setCasillero(Casillero casillero) {
 		this.casillero = casillero;
 	}
 	
-	public static void initIds(){
-		ids = 0;
-	}
-	protected static int incrementaID(){
-		ids = ids+1;
-		return ids;
-	}
+	
 	public Jugador getJugador() {
 		return jugador;
 	}
@@ -84,54 +80,54 @@ public abstract class Ficha extends Entidad{
 			throw new CasilleroOcupadoException("El casillero se encuentra ocupado");
 		}
 		this.casillero = casillero2;
-		casillero.setFicha(this);
+		this.casillero.ocupado();
 	}
-	public void cambiaCasillero(Casillero casillero2) throws CasilleroOcupadoException {
+	public void cambiaCasillero(Casillero casillero2,Class clazz) throws CasilleroOcupadoException {
 		if(this.casillero != null && casillero2.isOcupada()){
 			throw new CasilleroOcupadoException("El casillero se encuentra ocupado");
 		}
+		this.casillero.desOcupado();
+		casillero2.ocupado();
 		this.casillero = casillero2;
-		casillero.cambiarFicha(this);
+		objectPersistenceService.guarda(this);
 	}
-	@Deprecated
-	public List<Casillero> dameCasillerosDisponibles(List<Casillero> casilleros){
-		return this.casillero.getVecinos(this,casilleros);
-	}
-	public List<Casillero> dameCasillerosDisponibles(){
+	
+	public List<CasilleroNegro> dameCasillerosDisponibles(){
 		return this.casillero.getCasillerosDisponibles();
 	}
-	public Casillero dameCasilleroDerecha() throws NoExisteCasilleroDisponibleException{
-		List<Casillero> casilleros = this.casillero.vecinoDiagonalDerecha(Tablero.dameTablero().getNegros(), this.jugador.soyContrincante());
+	public CasilleroNegro dameCasilleroDerecha() throws NoExisteCasilleroDisponibleException{
+		Tablero tablero = Tablero.dameTablero();
+		List<CasilleroNegro> casilleros = this.casillero.vecinoDiagonalDerecha(tablero.getNegros(), this.jugador.soyContrincante(),this.getClass());
 		if(casilleros == null || casilleros.isEmpty()){
 			throw new NoExisteCasilleroDisponibleException("No existe casillero disponible");
 		}
 		return casilleros.get(0);
 	}
-	public boolean tePuedoComer( List<Casillero> casillerosNegros, boolean esDerecha) {
-		List<Casillero> casilleros=null;
+	public boolean tePuedoComer( List<CasilleroNegro> casillerosNegros, boolean esDerecha) {
+		List<CasilleroNegro> casilleros=null;
 		if(esDerecha){
-			casilleros = this.casillero.vecinoDiagonalIzquierdaAtras(casillerosNegros, this.jugador.soyContrincante());
+			casilleros = this.casillero.vecinoDiagonalIzquierdaAtras(casillerosNegros, this.jugador.soyContrincante(),this.getClass());
 			if(casilleros == null || casilleros.isEmpty()){
 				return false;
 			}
 			return true;
 		}
-		casilleros = this.casillero.vecinoDiagonalDerechaAtras(casillerosNegros, this.jugador.soyContrincante());
+		casilleros = this.casillero.vecinoDiagonalDerechaAtras(casillerosNegros, this.jugador.soyContrincante(),this.getClass());
 		if(casilleros == null || casilleros.isEmpty()){
 			return false;
 		}
 		return true;
 	}
 	public Casillero dameCasilleroIzquierda() throws NoExisteCasilleroDisponibleException{
-		List<Casillero> casilleros = this.casillero.vecinoDiagonalIzquierda(Tablero.dameTablero().getNegros(),this.jugador.soyContrincante());
+		Tablero tablero = Tablero.dameTablero();
+		List<CasilleroNegro> casilleros = this.casillero.vecinoDiagonalIzquierda(tablero.getNegros(),this.jugador.soyContrincante(),this.getClass());
 		if(casilleros == null || casilleros.isEmpty()){
 			throw new NoExisteCasilleroDisponibleException("No existe casillero disponible");
 		}
 		return casilleros.get(0);
 	}
 	public void movete(Casillero casillero) throws CasilleroOcupadoException {
-		this.casillero.ficha = null;
-		cambiaCasillero(casillero);
+		cambiaCasillero(casillero,this.getJugador().getClass());
 	}
 	public Casillero comeFicha(Casillero casillero) throws NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException {
 		if(!casillero.tenesFichaContrario(this.jugador)){
@@ -139,15 +135,16 @@ public abstract class Ficha extends Entidad{
 		}
 		Tablero tablero = Tablero.dameTablero();
 		boolean esDerecha = esCasilleroDerecha(tablero.getNegros());
-		if(!casillero.ficha.tePuedoComer(tablero.getNegros(),esDerecha)){
+		Ficha ficha = objectPersistenceService.obtenerFicha((CasilleroNegro) casillero);
+		if(!ficha.tePuedoComer(tablero.getNegros(),esDerecha)){
 			throw new NoPuedoComerFichaException("No se puede comer la ficha");
 		}
-		Casillero returnCasillero=casillero.dameCasilleroAnterior(this.jugador.soyContrincante(),tablero.getNegros(),esDerecha);
+		Casillero returnCasillero=casillero.dameCasilleroAnterior(this.jugador.soyContrincante(),tablero.getNegros(),esDerecha,this.jugador.getEntityTypeFicha());
 		casillero.eliminaFicha();
 		return returnCasillero;
 	}
-	private boolean esCasilleroDerecha(List<Casillero> casillerosNegros) {
-		List<Casillero> casilleros = casillero.vecinoDiagonalDerecha(casillerosNegros, this.jugador.soyContrincante());
+	private boolean esCasilleroDerecha(List<CasilleroNegro> casillerosNegros) {
+		List<CasilleroNegro> casilleros = casillero.vecinoDiagonalDerecha(casillerosNegros, this.jugador.soyContrincante(),this.getClass());
 		if(casilleros != null && !casilleros.isEmpty()){
 			return true;
 		}
@@ -155,14 +152,23 @@ public abstract class Ficha extends Entidad{
 	}
 	public void eliminate() {
 		this.jugador.getFichas().remove(this);
+		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
+		this.casillero.desOcupado();
+		objectPersistenceService.guarda(this.casillero);
+		objectPersistenceService.guarda(this.jugador);
+		this.casillero = null;
+		objectPersistenceService.guarda(this);
+		
+		
 	}
 	public boolean esDeContrincante() {
 		return this.jugador.soyContrincante();
 	}
 	public boolean isDerechaCasillero(Casillero casilleroSeleccionado) throws NoExisteCasilleroDisponibleException{
 		boolean result=false;
-		if(casilleroSeleccionado.isOcupada() && !casilleroSeleccionado.ficha.jugador.equals(this.jugador)){
-			Casillero miCasillero = casilleroSeleccionado.ficha.dameCasilleroDerecha();
+		Ficha ficha = objectPersistenceService.obtenerFicha((CasilleroNegro) casilleroSeleccionado);
+		if(casilleroSeleccionado.isOcupada() && !ficha.jugador.equals(this.jugador)){
+			Casillero miCasillero = ficha.dameCasilleroDerecha();
 			result = this.casillero.equals(miCasillero);
 		}
 		return result;
