@@ -3,37 +3,58 @@ package dominio;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import excepciones.CasilleroOcupadoException;
 
 public class Maquina  extends Jugador{
 
-	private static final String BLANCO = "BLANCO";
 	
-	
-	
+	private static final long serialVersionUID = -5772012035090550171L;
+	private Humano contrincante;
 	public Maquina(){
+		Ficha.initIds();
 		this.nombre = "MAQUINA";
+		setIdEntity(this.getNombre());
+		setEntityType(Maquina.class.getName());
 	}
+	public void agregarJugador(Jugador jugador) {
+		contrincante = (Humano) jugador;
+	}
+	public void tenesTurno(){
+		this.tieneTurno();
+		this.contrincante.esperaTurno();
+	}
+	public Humano getContrincante() {
+		return contrincante;
+	}
+	public void setContrincante(Humano contrincante) {
+		this.contrincante = contrincante;
+	}
+	public void finTurno() {
+		this.esperaTurno();
+		this.contrincante.tieneTurno();
+	}
+	@Override
+	public String getEntityType() {
+		return Maquina.class.getName();
+	}
+	
 	public void poneFichas(List<Casillero> casillerosNegros){
-		try{
-		
-		List<Casillero> misCasilleros = new ArrayList<Casillero>(casillerosNegros);
+		Object[] vecCasilleros = casillerosNegros.toArray();
+		CollectionUtils.reverseArray(vecCasilleros);
 		fichas = new ArrayList<Ficha>();
-		int countFicha = 0;
-		for (Casillero casillero : misCasilleros) {
-			if (countFicha == 15) {
-				break;
+		try {
+			for (int i = 0; i < 15; i++) {
+				Casillero casillero = (Casillero) vecCasilleros[i];
+				Ficha ficha = new FichaBlanca();
+				ficha.addCasillero(casillero);
+				ficha.setJugador(this);
+				fichas.add(ficha);
 			}
-			Ficha ficha = new Ficha();
-			ficha.addCasillero(casillero);
-			ficha.setColor(BLANCO);
-			ficha.setJugador(this);
-			fichas.add(ficha);
-			countFicha++;
+		} catch (CasilleroOcupadoException e) {
+			throw new RuntimeException(e);
 		}
-	} catch (CasilleroOcupadoException e) {
-		throw new RuntimeException(e);
-	}
 	}
 	@Override
 	public boolean soyContrincante() {
@@ -41,6 +62,19 @@ public class Maquina  extends Jugador{
 			return false;
 		}
 	return true;
+	}
+	
+	public static Jugador dameJugador(){
+//		com.db4o.query.Predicate predicate = new com.db4o.query.Predicate(){
+//		    public boolean match(Maquina maquina) {
+//		        return maquina.getNombre().equals("MAQUINA");
+//		    }
+//		};
+		List<Entidad> resultList = null;//managerDataBase.executeQuery(predicate);
+		if(resultList != null && !resultList.isEmpty()){
+			return (Jugador) (new ArrayList(resultList)).get(0);
+		}
+		return null;
 	}
 	
 }

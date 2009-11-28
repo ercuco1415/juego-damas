@@ -2,18 +2,29 @@ package dominio;
 
 import java.util.List;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import excepciones.NoExisteCasilleroDisponibleException;
 
-public abstract class Casillero {
+public abstract class Casillero extends Entidad{
+	
+	private static final long serialVersionUID = -786502683990149694L;
 	protected static final String BLANCO = "BLANCO";
 	protected int x;
 	protected int y;
 	protected List<Casillero> vecinos;
-	protected Ficha ficha;
 	
+	
+	protected Ficha ficha;
+	public void cambiarFicha(Ficha ficha){
+		this.ficha = ficha;
+	}
+	public Ficha getFicha() {
+		return ficha;
+	}
+	public void setFicha(Ficha ficha) {
+		this.ficha = ficha;
+	}
 	public boolean isOcupada(){
 		if(ficha == null) return false;
 		return true;
@@ -26,13 +37,22 @@ public abstract class Casillero {
 	public abstract List<Casillero> getCasillerosDisponibles();
 	@Override
 	public boolean equals(Object obj) {
-		boolean returnboolean = EqualsBuilder.reflectionEquals(this, obj);
-		return returnboolean;
+		if(obj == null){
+			return false;
+		}
+		if(!this.getClass().equals(obj.getClass())){
+			return false;
+		}
+		Casillero casillero = (Casillero) obj;
+		if(this.getId()== null || !this.getId().equals(casillero.getId()) ){
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		int returnint = HashCodeBuilder.reflectionHashCode(this);
+		int returnint = HashCodeBuilder.reflectionHashCode(this.getId());
 		return returnint;
 	}
 
@@ -85,6 +105,9 @@ public abstract class Casillero {
 			}
 		}
 		return casillero;
+	}
+	public void generateId() {
+		this.setIdEntity(this.toString());
 	}
 	
 }

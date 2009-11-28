@@ -9,12 +9,20 @@ import org.apache.commons.collections.Predicate;
 
 public class CasilleroNegro extends Casillero {
 
+
+	private static final long serialVersionUID = -3081298016886815927L;
 	private static final String NEGRO = "NEGRO";
 
+	public CasilleroNegro(){
+		setEntityType(CasilleroNegro.class.getName());
+	}
 	public String getType() {
 		return NEGRO;
 	}
-
+	@Override
+	public String getEntityType() {
+		return CasilleroNegro.class.getName();
+	}
 	public List<Casillero> getVecinos(Ficha ficha,
 			List<Casillero> casillerosNegros) {
 		List<Casillero> casilleros = vecinoDiagonalDerecha(casillerosNegros,
@@ -27,10 +35,17 @@ public class CasilleroNegro extends Casillero {
 	public List<Casillero> getCasillerosDisponibles(){
 		List<Casillero> casillerosList = new ArrayList<Casillero>();
 		if(this.ficha != null ){
-			casillerosList.addAll(vecinoDiagonalDerecha(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
-			casillerosList.addAll(vecinoDiagonalDerechaAtras(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
-			casillerosList.addAll(vecinoDiagonalIzquierdaAtras(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
-			casillerosList.addAll(vecinoDiagonalIzquierda(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+			casillerosList.addAll(vecinoDiagonalDerecha(Tablero.dameTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+			casillerosList.addAll(vecinoDiagonalIzquierda(Tablero.dameTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+			//TODO falta retornar los casilleros en caso de dama
+//			if( !this.ficha.getJugador().soyContrincante()){
+//				casillerosList.addAll(vecinoDiagonalDerecha(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+//				casillerosList.addAll(vecinoDiagonalIzquierda(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+//				
+//			}else{
+//				casillerosList.addAll(vecinoDiagonalDerechaAtras(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+//				casillerosList.addAll(vecinoDiagonalIzquierdaAtras(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+//			}
 		}
 		return casillerosList;
 	}
@@ -38,15 +53,17 @@ public class CasilleroNegro extends Casillero {
 			List<Casillero> casillerosNegros, boolean soyContrincante) {
 
 		PredicateCasilleroVecino predicado = new PredicateCasilleroVecino();
+		
 		if (!soyContrincante) {
-			predicado.x = this.x + 1;
-			predicado.y = this.y + 1;
+			predicado.x = this.x - 1;
+			predicado.y = this.y - 1;
 			Collection casillerosVecinosMios = CollectionUtils.select(
 					casillerosNegros, predicado);
 			return new ArrayList<Casillero>(casillerosVecinosMios);
 		}
-		predicado.x = this.x - 1;
-		predicado.y = this.y - 1;
+		predicado.x = this.x + 1;
+		predicado.y = this.y + 1;
+		
 		Collection casillerosVecinosContrincante = CollectionUtils.select(
 				casillerosNegros, predicado);
 		return new ArrayList<Casillero>(casillerosVecinosContrincante);
@@ -57,22 +74,6 @@ public class CasilleroNegro extends Casillero {
 
 		PredicateCasilleroVecino predicado = new PredicateCasilleroVecino();
 		if (!soyContrincante) {
-			predicado.x = this.x + 1;
-			predicado.y = this.y - 1;
-			Collection casillerosVecinosMios = CollectionUtils.select(
-					casillerosNegros, predicado);
-			return new ArrayList<Casillero>(casillerosVecinosMios);
-		}
-		predicado.x = this.x - 1;
-		predicado.y = this.y + 1;
-		Collection casillerosVecinosContrincante = CollectionUtils.select(
-				casillerosNegros, predicado);
-		return new ArrayList<Casillero>(casillerosVecinosContrincante);
-	}
-	public List<Casillero> vecinoDiagonalIzquierda(
-			List<Casillero> casillerosNegros, boolean soyContrincante) {
-		PredicateCasilleroVecino predicado = new PredicateCasilleroVecino();
-		if (!soyContrincante) {
 			predicado.x = this.x - 1;
 			predicado.y = this.y + 1;
 			Collection casillerosVecinosMios = CollectionUtils.select(
@@ -81,6 +82,24 @@ public class CasilleroNegro extends Casillero {
 		}
 		predicado.x = this.x + 1;
 		predicado.y = this.y - 1;
+	
+		Collection casillerosVecinosContrincante = CollectionUtils.select(
+				casillerosNegros, predicado);
+		return new ArrayList<Casillero>(casillerosVecinosContrincante);
+	}
+	public List<Casillero> vecinoDiagonalIzquierda(
+			List<Casillero> casillerosNegros, boolean soyContrincante) {
+		PredicateCasilleroVecino predicado = new PredicateCasilleroVecino();
+		if (!soyContrincante) {
+			predicado.x = this.x + 1;
+			predicado.y = this.y - 1;
+			Collection casillerosVecinosMios = CollectionUtils.select(
+					casillerosNegros, predicado);
+			return new ArrayList<Casillero>(casillerosVecinosMios);
+		}
+		predicado.x = this.x - 1;
+		predicado.y = this.y + 1;
+		
 		Collection casillerosVecinosContrincante = CollectionUtils.select(
 				casillerosNegros, predicado);
 		return new ArrayList<Casillero>(casillerosVecinosContrincante);
@@ -90,14 +109,15 @@ public class CasilleroNegro extends Casillero {
 			List<Casillero> casillerosNegros, boolean soyContrincante) {
 		PredicateCasilleroVecino predicado = new PredicateCasilleroVecino();
 		if (!soyContrincante) {
-			predicado.x = this.x - 1;
-			predicado.y = this.y - 1;
+			predicado.x = this.x + 1;
+			predicado.y = this.y + 1;
 			Collection casillerosVecinosMios = CollectionUtils.select(
 					casillerosNegros, predicado);
 			return new ArrayList<Casillero>(casillerosVecinosMios);
 		}
-		predicado.x = this.x + 1;
-		predicado.y = this.y + 1;
+		predicado.x = this.x - 1;
+		predicado.y = this.y - 1;
+		
 		Collection casillerosVecinosContrincante = CollectionUtils.select(
 				casillerosNegros, predicado);
 		return new ArrayList<Casillero>(casillerosVecinosContrincante);
@@ -105,7 +125,6 @@ public class CasilleroNegro extends Casillero {
 	public class PredicateCasilleroVecino implements Predicate {
 		public int x;
 		public int y;
-
 		public boolean evaluate(Object arg0) {
 			Casillero casillero = (Casillero) arg0;
 			if (casillero.getX() == x && casillero.getY() == y) {

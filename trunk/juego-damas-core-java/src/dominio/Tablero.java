@@ -7,24 +7,49 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
-public class Tablero {
+import persistence.daos.CasilleroDao;
+
+public class Tablero extends Entidad{
+	
+	private static final long serialVersionUID = 2131207467858074405L;
 	protected static final String NEGRO = "NEGRO";
 	protected static final String BLANCO = "BLANCO";
 	private List<Casillero> casilleros;
+	private String nombre="TABLERO";
+	
+	public String getNombre() {
+		return nombre;
+	}
+	@Override
+	public String getEntityType() {
+		return Tablero.class.getName();
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
 	public Tablero() {
+		setIdEntity(this.getNombre());
+		setEntityType(Tablero.class.getName());
 		casilleros = new ArrayList<Casillero>();
 		for (int y = 1; y <= 10; y++) {
 			for (int x = 1; x <= 10; x++) {
 				Casillero casillero = null;
-				if (((x + y) % 2) == 0) {
+				if (!(((x + y) % 2) == 0)) {
 					casillero = new CasilleroNegro();
-				} else {
-					casillero = new CasilleroBlanco();
-				}
-				casillero.setX(x);
-				casillero.setY(y);
-				casilleros.add(casillero);
+					casillero.setX(x);
+					casillero.setY(y);
+					casillero.generateId();
+					
+//					CasilleroDao casilleroDao = new CasilleroDao();
+//					casilleroDao.create(casillero);
+//					
+					casilleros.add(casillero);
+				} 
+//				
+//				else {
+//					casillero = new CasilleroBlanco();
+//				}
 			}
 		}
 	}
@@ -76,6 +101,17 @@ public class Tablero {
 	public void setCasilleros(List<Casillero> casilleros) {
 		this.casilleros = casilleros;
 	}
-
+	public static Tablero dameTablero(){
+//		com.db4o.query.Predicate predicate = new com.db4o.query.Predicate(){
+//		    public boolean match(Tablero tablero) {
+//		        return tablero.getNombre().equals("TABLERO");
+//		    }
+//		};
+		List<Entidad> resultList = null;//managerDataBase.executeQuery(predicate);
+		if(resultList != null && !resultList.isEmpty()){
+			return (Tablero) (new ArrayList(resultList)).get(0);
+		}
+		return null;
+	}
 
 }
