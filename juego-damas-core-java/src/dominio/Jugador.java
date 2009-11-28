@@ -14,37 +14,40 @@ import excepciones.NoPuedoComerFichaException;
 import excepciones.NoTieneFichaContrarioException;
 
 
-public abstract class Jugador {
+public abstract class Jugador extends Entidad{
+	
+	private static final long serialVersionUID = -4378068140511460081L;
 	protected String nombre;
 	protected int puntajeTotal;
 	protected boolean finalizoJuego=false;
 	protected boolean soyGanador=false;
-	protected List<Ficha> fichas;
 	protected boolean tieneTurno;
-	private Tablero tablero;
 	
-	public Tablero getTablero() {
-		return tablero;
-	}
-	public void setTablero(Tablero tablero) {
-		this.tablero = tablero;
-	}
+	
+	protected List<Ficha> fichas;
+	
+	
 	public abstract void poneFichas(List<Casillero> list);
 	public List<Ficha> getFichas() {
 		return fichas;
 	}
-	public void agregarJugador(Jugador jugador) {
-		contrincante = jugador;
+	
+	public boolean isSoyGanador() {
+		return soyGanador;
 	}
-	public void tenesTurno(){
-		this.tieneTurno();
-		this.contrincante.esperaTurno();
+	public void setSoyGanador(boolean soyGanador) {
+		this.soyGanador = soyGanador;
 	}
-	public void finTurno() {
-		this.esperaTurno();
-		this.contrincante.tieneTurno();
+	
+	public void setPuntajeTotal(int puntajeTotal) {
+		this.puntajeTotal = puntajeTotal;
 	}
-	private Jugador contrincante;
+	public void setFinalizoJuego(boolean finalizoJuego) {
+		this.finalizoJuego = finalizoJuego;
+	}
+	public void setTieneTurno(boolean tieneTurno) {
+		this.tieneTurno = tieneTurno;
+	}
 	public Ficha dameFicha(Casillero casillero) throws NoHayFichaEnCasilleroException{
 		PredicateFicha predicado = new PredicateFicha();
 		predicado.x = casillero.getX();
@@ -111,30 +114,36 @@ public abstract class Jugador {
 	public  void moveFicha(Ficha ficha, Casillero casilleroSeleccionado) throws CasilleroOcupadoException {
 		if(this.getFichas().contains(ficha)){
 			ficha.movete(casilleroSeleccionado);
-			this.finTurno();
+			finTurno();
 		}
 		
 	}
+	protected abstract void finTurno();
+	
 	public List<Casillero> dameCasillerosLibres() throws CasilleroOcupadoException{
 		List<Casillero> casillerosDisponibles = new ArrayList<Casillero>();
 		for(Ficha ficha: this.getFichas()){
-			casillerosDisponibles.addAll(ficha.dameCasillerosDisponibles(tablero.getNegros()));
+			casillerosDisponibles.addAll(ficha.dameCasillerosDisponibles());
 		}
 		return casillerosDisponibles;
 	}
 	
 	public void comeFichaCon(Ficha ficha , Casillero casilleroSeleccionado) throws CasilleroOcupadoException, NoHayFichaEnCasilleroException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException{
-		if(casilleroSeleccionado.isOcupada() && casilleroSeleccionado.ficha.getJugador().contrincante.equals(this)){
+		if(casilleroSeleccionado.isOcupada() && casilleroSeleccionado.ficha.getJugador().getContrincante().equals(this)){
 			boolean mueveDerecha = ficha.isDerechaCasillero(casilleroSeleccionado);
 			Casillero casilleroContrincante=null;
 			if(mueveDerecha){
-				casilleroContrincante= ficha.dameCasilleroDerecha(tablero.getNegros());
+				casilleroContrincante= ficha.dameCasilleroDerecha();
 			}else{
-				casilleroContrincante= ficha.dameCasilleroIzquierda(tablero.getNegros());
+				casilleroContrincante= ficha.dameCasilleroIzquierda();
 			}
-			Casillero casilleroNuevo = ficha.comeFicha(casilleroContrincante,tablero.getNegros());
+			Casillero casilleroNuevo = ficha.comeFicha(casilleroContrincante);
 			ficha.movete(casilleroNuevo);
 			this.finTurno();
 		}
 	}
+	protected abstract Jugador getContrincante() ;
+	public abstract void agregarJugador(Jugador jugadorHumano);
+	public abstract void tenesTurno() ;
+	
 }
