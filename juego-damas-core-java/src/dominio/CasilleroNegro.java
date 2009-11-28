@@ -1,20 +1,33 @@
 package dominio;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
+import servicios.ObjectPersistenceService;
 
 public class CasilleroNegro extends Casillero {
 
 
 	private static final long serialVersionUID = -3081298016886815927L;
 	private static final String NEGRO = "NEGRO";
+	private static final String BLANCO = "BLANCO";
+	private boolean ocupado;
+	
+	public Boolean getOcupado() {
+		return ocupado;
+	}
+
+	public void setOcupado(Boolean ocupado) {
+		this.ocupado = ocupado;
+	}
 
 	public CasilleroNegro(){
 		setEntityType(CasilleroNegro.class.getName());
+	}
+	
+	public boolean isOcupada(){
+		if( obtenerFicha() == null && this.getOcupado().equals(Boolean.FALSE)) return false;
+		return true;
 	}
 	public String getType() {
 		return NEGRO;
@@ -23,20 +36,19 @@ public class CasilleroNegro extends Casillero {
 	public String getEntityType() {
 		return CasilleroNegro.class.getName();
 	}
-	public List<Casillero> getVecinos(Ficha ficha,
-			List<Casillero> casillerosNegros) {
-		List<Casillero> casilleros = vecinoDiagonalDerecha(casillerosNegros,
-				!ficha.getColor().equals(BLANCO));
-		casilleros.addAll(vecinoDiagonalIzquierda(casillerosNegros, !ficha
-				.getColor().equals(BLANCO)));
+	public List<CasilleroNegro> getVecinos(Ficha ficha, List<CasilleroNegro> casillerosNegros) {
+		List<CasilleroNegro> casilleros = vecinoDiagonalDerecha(casillerosNegros,!ficha.getColor().equals(BLANCO),ficha.getClass());
+		casilleros.addAll(vecinoDiagonalIzquierda(casillerosNegros, !ficha.getColor().equals(BLANCO),ficha.getClass()));
 		return casilleros;
 	}
 	
-	public List<Casillero> getCasillerosDisponibles(){
-		List<Casillero> casillerosList = new ArrayList<Casillero>();
-		if(this.ficha != null ){
-			casillerosList.addAll(vecinoDiagonalDerecha(Tablero.dameTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
-			casillerosList.addAll(vecinoDiagonalIzquierda(Tablero.dameTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
+	public List<CasilleroNegro> getCasillerosDisponibles(){
+		List<CasilleroNegro> casillerosList = new ArrayList<CasilleroNegro>();
+		Ficha ficha = obtenerFicha();
+		if(ficha!= null  && ficha.getEntityType().equals(FichaNegra.class.getName())){
+			Tablero tablero = Tablero.dameTablero();
+			casillerosList.addAll(vecinoDiagonalDerecha(tablero.getNegros(), ficha.getJugador().soyContrincante(),ficha.getClass()));
+			casillerosList.addAll(vecinoDiagonalIzquierda(tablero.getNegros(), ficha.getJugador().soyContrincante(),ficha.getClass()));
 			//TODO falta retornar los casilleros en caso de dama
 //			if( !this.ficha.getJugador().soyContrincante()){
 //				casillerosList.addAll(vecinoDiagonalDerecha(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
@@ -49,89 +61,81 @@ public class CasilleroNegro extends Casillero {
 		}
 		return casillerosList;
 	}
-	public List<Casillero> vecinoDiagonalDerecha(
-			List<Casillero> casillerosNegros, boolean soyContrincante) {
+	public List<CasilleroNegro> vecinoDiagonalDerecha(
+			List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1) {
 
-		PredicateCasilleroVecino predicado = new PredicateCasilleroVecino();
-		
+		int _x,_y;
 		if (!soyContrincante) {
-			predicado.x = this.x - 1;
-			predicado.y = this.y - 1;
-			Collection casillerosVecinosMios = CollectionUtils.select(
-					casillerosNegros, predicado);
-			return new ArrayList<Casillero>(casillerosVecinosMios);
+			_x = this.x - 1;
+			_y = this.y - 1;
+			
+		}else{
+			_x = this.x + 1;
+			_y = this.y + 1;
+			
 		}
-		predicado.x = this.x + 1;
-		predicado.y = this.y + 1;
-		
-		Collection casillerosVecinosContrincante = CollectionUtils.select(
-				casillerosNegros, predicado);
-		return new ArrayList<Casillero>(casillerosVecinosContrincante);
+		return this.obtenerCasillerosDisponibles(_x, _y,class1);
 	}
 
-	public List<Casillero> vecinoDiagonalDerechaAtras(
-			List<Casillero> casillerosNegros, boolean soyContrincante) {
-
-		PredicateCasilleroVecino predicado = new PredicateCasilleroVecino();
+	public List<CasilleroNegro> vecinoDiagonalDerechaAtras(
+			List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1) {
+		int _x,_y;
 		if (!soyContrincante) {
-			predicado.x = this.x - 1;
-			predicado.y = this.y + 1;
-			Collection casillerosVecinosMios = CollectionUtils.select(
-					casillerosNegros, predicado);
-			return new ArrayList<Casillero>(casillerosVecinosMios);
+			_x = this.x - 1;
+			_y = this.y + 1;
+		}else{
+			_x = this.x + 1;
+			_y = this.y - 1;
 		}
-		predicado.x = this.x + 1;
-		predicado.y = this.y - 1;
-	
-		Collection casillerosVecinosContrincante = CollectionUtils.select(
-				casillerosNegros, predicado);
-		return new ArrayList<Casillero>(casillerosVecinosContrincante);
+		return this.obtenerCasillerosDisponibles(_x, _y,class1);
 	}
-	public List<Casillero> vecinoDiagonalIzquierda(
-			List<Casillero> casillerosNegros, boolean soyContrincante) {
-		PredicateCasilleroVecino predicado = new PredicateCasilleroVecino();
+	public List<CasilleroNegro> vecinoDiagonalIzquierda(
+			List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1) {
+		int _x,_y;
 		if (!soyContrincante) {
-			predicado.x = this.x + 1;
-			predicado.y = this.y - 1;
-			Collection casillerosVecinosMios = CollectionUtils.select(
-					casillerosNegros, predicado);
-			return new ArrayList<Casillero>(casillerosVecinosMios);
+			_x = this.x + 1;
+			_y = this.y - 1;
+		}else{
+			_x = this.x - 1;
+			_y = this.y + 1;
 		}
-		predicado.x = this.x - 1;
-		predicado.y = this.y + 1;
-		
-		Collection casillerosVecinosContrincante = CollectionUtils.select(
-				casillerosNegros, predicado);
-		return new ArrayList<Casillero>(casillerosVecinosContrincante);
+		return this.obtenerCasillerosDisponibles(_x, _y,class1);
 	}
 
-	public List<Casillero> vecinoDiagonalIzquierdaAtras(
-			List<Casillero> casillerosNegros, boolean soyContrincante) {
-		PredicateCasilleroVecino predicado = new PredicateCasilleroVecino();
+	public List<CasilleroNegro> vecinoDiagonalIzquierdaAtras(
+			List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1){
+		int _x,_y;
 		if (!soyContrincante) {
-			predicado.x = this.x + 1;
-			predicado.y = this.y + 1;
-			Collection casillerosVecinosMios = CollectionUtils.select(
-					casillerosNegros, predicado);
-			return new ArrayList<Casillero>(casillerosVecinosMios);
+			_x = this.x + 1;
+			_y = this.y + 1;
+		}else{
+			_x = this.x - 1;
+			_y = this.y - 1;
 		}
-		predicado.x = this.x - 1;
-		predicado.y = this.y - 1;
-		
-		Collection casillerosVecinosContrincante = CollectionUtils.select(
-				casillerosNegros, predicado);
-		return new ArrayList<Casillero>(casillerosVecinosContrincante);
+		return this.obtenerCasillerosDisponibles(_x, _y,class1);
 	}
-	public class PredicateCasilleroVecino implements Predicate {
-		public int x;
-		public int y;
-		public boolean evaluate(Object arg0) {
-			Casillero casillero = (Casillero) arg0;
-			if (casillero.getX() == x && casillero.getY() == y) {
-				return true;
-			}
-			return false;
-		}
+	public List<CasilleroNegro> obtenerCasillerosDisponibles(int x,int y,Class clazz){
+		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
+		return objectPersistenceService.obtenerCasillerosDisponibles(x,y,clazz);
+	}
+	public Ficha obtenerFicha(){
+		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
+		return objectPersistenceService.obtenerFicha(this) ;
+	}
+
+	@Override
+	protected void ocupado() {
+		this.ocupado = Boolean.TRUE;
+		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
+		objectPersistenceService.guarda(this);
+		
+	}
+
+	@Override
+	protected void desOcupado() {
+		this.ocupado = Boolean.FALSE;
+		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
+		objectPersistenceService.guarda(this);
 	}
 	
 }

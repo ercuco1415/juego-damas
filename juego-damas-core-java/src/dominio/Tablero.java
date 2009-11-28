@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
-import persistence.daos.CasilleroDao;
+import servicios.ObjectPersistenceService;
 
 public class Tablero extends Entidad{
 	
@@ -34,13 +34,13 @@ public class Tablero extends Entidad{
 		casilleros = new ArrayList<Casillero>();
 		for (int y = 1; y <= 10; y++) {
 			for (int x = 1; x <= 10; x++) {
-				Casillero casillero = null;
+				CasilleroNegro casillero = null;
 				if (!(((x + y) % 2) == 0)) {
 					casillero = new CasilleroNegro();
 					casillero.setX(x);
 					casillero.setY(y);
 					casillero.generateId();
-					
+					casillero.setOcupado(Boolean.FALSE);
 //					CasilleroDao casilleroDao = new CasilleroDao();
 //					casilleroDao.create(casillero);
 //					
@@ -54,7 +54,7 @@ public class Tablero extends Entidad{
 		}
 	}
 
-	public List<Casillero> getNegros() {
+	public List<CasilleroNegro> getNegros() {
 		Predicate pred = new Predicate() {
 			public boolean evaluate(Object arg0) {
 				Casillero casillero = (Casillero) arg0;
@@ -65,7 +65,7 @@ public class Tablero extends Entidad{
 			}
 		};
 		Collection reCollection = CollectionUtils.select(this.casilleros, pred);
-		return new ArrayList<Casillero>(reCollection);
+		return new ArrayList<CasilleroNegro>(reCollection);
 	}
 	public List<Casillero> getCasillerosDesocupados() {
 		Predicate pred = new Predicate() {
@@ -102,16 +102,8 @@ public class Tablero extends Entidad{
 		this.casilleros = casilleros;
 	}
 	public static Tablero dameTablero(){
-//		com.db4o.query.Predicate predicate = new com.db4o.query.Predicate(){
-//		    public boolean match(Tablero tablero) {
-//		        return tablero.getNombre().equals("TABLERO");
-//		    }
-//		};
-		List<Entidad> resultList = null;//managerDataBase.executeQuery(predicate);
-		if(resultList != null && !resultList.isEmpty()){
-			return (Tablero) (new ArrayList(resultList)).get(0);
-		}
-		return null;
+		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
+		return objectPersistenceService.obtenerTablero();
 	}
 
 }

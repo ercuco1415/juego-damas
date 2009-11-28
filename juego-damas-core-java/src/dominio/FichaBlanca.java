@@ -8,10 +8,11 @@ public class FichaBlanca extends Ficha {
 	public String getEntityType() {
 		return FichaBlanca.class.getName();
 	}
-	public FichaBlanca() {
+	public FichaBlanca(){}
+	public FichaBlanca(int i) {
 		this.setColor(Ficha.BLANCA);
 		setEntityType(getEntityType());
-		this.setIdEntity( this.getColor() + incrementaID());
+		this.setIdEntity( this.getColor() + i);
 	}
 
 }

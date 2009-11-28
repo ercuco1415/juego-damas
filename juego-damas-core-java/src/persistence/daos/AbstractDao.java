@@ -10,12 +10,17 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
+
+import dominio.Entidad;
+import dominio.Ficha;
 
 import persistence.HibernateFactory;
 import persistence.exceptions.DataAccessLayerException;
@@ -87,6 +92,26 @@ public abstract class AbstractDao {
 		
 		return obj;
 	}
+	public Entidad findByIdEntity(Class clazz,String idEntity) {
+		Entidad entidad = null;
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = HibernateFactory.openSession();
+			tx = session.beginTransaction();
+			Criteria criteria = session.createCriteria(clazz);
+			criteria.add(Restrictions.like("idEntity", idEntity));
+			List entidades = criteria.list();
+			entidad = (Entidad)entidades.get(0);
+			tx.commit();
+		} catch (HibernateException e) {
+			handleException(tx, e);
+		} finally {
+			HibernateFactory.closeSession(session);
+		}
+    	
+        return entidad;
+	}
 	@SuppressWarnings("unchecked")
 	protected List findQuery(String from, String where, Map<String, Object> hashMap) {
 		List objects = new ArrayList();
@@ -115,9 +140,7 @@ public abstract class AbstractDao {
 	protected Query setQueryParameters(Query query, Map<String, Object> hashMap) {
 		for (Iterator i = hashMap.entrySet().iterator(); i.hasNext();) {
 			Map.Entry e = (Map.Entry)i.next();
-			if (((String)e.getKey()).substring(0, 1).equals("a")) {
 				query.setParameter((String)e.getKey(), e.getValue());
-			}
 		}
 		return query;
 	}

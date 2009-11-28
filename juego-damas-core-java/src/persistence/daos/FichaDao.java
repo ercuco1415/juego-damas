@@ -7,11 +7,14 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Property;
 
 import persistence.HibernateFactory;
 import persistence.exceptions.DataAccessLayerException;
+import dominio.CasilleroNegro;
 import dominio.Ficha;
+import dominio.FichaBlanca;
+import dominio.FichaNegra;
 
 public class FichaDao extends AbstractDao  {
   
@@ -41,17 +44,43 @@ public class FichaDao extends AbstractDao  {
     }
    
    
-	public Ficha findByIdEntity(Class clazz,String idEntity) {
+	
+
+	public Ficha findBlanca(CasilleroNegro casilleroNegro) {
 		Ficha ficha = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateFactory.openSession();
 			tx = session.beginTransaction();
-			Criteria criteria = session.createCriteria(clazz);
-			criteria.add(Restrictions.like("idEntity", idEntity));
-			List canales = criteria.list();
-			ficha = (Ficha)canales.get(0);
+			Criteria criteria = session.createCriteria(FichaBlanca.class).
+			createAlias("casillero","cas").
+			add(Property.forName("cas.idEntity").eq(casilleroNegro.getIdEntity())).
+			add(Property.forName("entityType").eq(FichaBlanca.class.getName()));
+			List fichas = criteria.list();
+			if(fichas != null && !fichas.isEmpty()) ficha = (Ficha)fichas.get(0);
+			tx.commit();
+		} catch (HibernateException e) {
+			handleException(tx, e);
+		} finally {
+			HibernateFactory.closeSession(session);
+		}
+    	
+        return ficha;
+	}
+	public Ficha findNegra(CasilleroNegro casilleroNegro) {
+		Ficha ficha = null;
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = HibernateFactory.openSession();
+			tx = session.beginTransaction();
+			Criteria criteria = session.createCriteria(FichaNegra.class).
+			createAlias("casillero","cas").
+			add(Property.forName("cas.idEntity").eq(casilleroNegro.getIdEntity())).
+			add(Property.forName("entityType").eq(FichaNegra.class.getName()));
+			List fichas = criteria.list();
+			if(fichas != null && !fichas.isEmpty()) ficha = (Ficha)fichas.get(0);
 			tx.commit();
 		} catch (HibernateException e) {
 			handleException(tx, e);

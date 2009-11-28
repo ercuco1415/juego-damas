@@ -13,7 +13,6 @@ public class Maquina  extends Jugador{
 	private static final long serialVersionUID = -5772012035090550171L;
 	private Humano contrincante;
 	public Maquina(){
-		Ficha.initIds();
 		this.nombre = "MAQUINA";
 		setIdEntity(this.getNombre());
 		setEntityType(Maquina.class.getName());
@@ -40,14 +39,15 @@ public class Maquina  extends Jugador{
 		return Maquina.class.getName();
 	}
 	
-	public void poneFichas(List<Casillero> casillerosNegros){
+	public void poneFichas(List<CasilleroNegro> casillerosNegros){
 		Object[] vecCasilleros = casillerosNegros.toArray();
 		CollectionUtils.reverseArray(vecCasilleros);
+		this.setEntityTypeFicha(FichaBlanca.class);
 		fichas = new ArrayList<Ficha>();
 		try {
 			for (int i = 0; i < 15; i++) {
 				Casillero casillero = (Casillero) vecCasilleros[i];
-				Ficha ficha = new FichaBlanca();
+				Ficha ficha = new FichaBlanca(i+1);
 				ficha.addCasillero(casillero);
 				ficha.setJugador(this);
 				fichas.add(ficha);

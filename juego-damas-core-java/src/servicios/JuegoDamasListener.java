@@ -6,11 +6,8 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 import persistence.utils.UtilDBInitializer;
-
 import dominio.Casillero;
 import dominio.CasilleroNegro;
 import dominio.Ficha;
@@ -43,7 +40,7 @@ public class JuegoDamasListener {
 		return true;
 	}
 
-	private boolean validaCasillero(Casillero casillero, List<Casillero> casillerosDisp) {
+	private boolean validaCasillero(Casillero casillero, List<CasilleroNegro> casillerosDisp) {
 		if (casillerosDisp == null || casillerosDisp.isEmpty()) {
 			return false;
 		}
@@ -57,14 +54,17 @@ public class JuegoDamasListener {
 	public void init() {
 		
 		UtilDBInitializer.initDropCreate();
+		objectPersistenceService.guarda(tablero);
 		
 		jugadorHumano.poneFichas(tablero.getNegros());
 		jugadorMaquina.poneFichas(tablero.getNegros());
+		objectPersistenceService.guarda(jugadorHumano);
+		objectPersistenceService.guarda(jugadorMaquina);
+		
 		jugadorMaquina.agregarJugador(jugadorHumano);
 		jugadorHumano.agregarJugador(jugadorMaquina);
 		jugadorMaquina.tenesTurno();
 		
-		objectPersistenceService.guarda(tablero);
 		objectPersistenceService.guarda(jugadorHumano);
 		objectPersistenceService.guarda(jugadorMaquina);
 		
@@ -73,18 +73,13 @@ public class JuegoDamasListener {
 	public boolean moveFicha(String fichaStr, String casilleroStr) throws NoHayFichaEnCasilleroException, FormatoCasilleroException,
 			CasilleroOcupadoException {
 		Ficha ficha = objectPersistenceService.dameFicha(FichaNegra.class,fichaStr);
-		List<Casillero> casillerosDisp = dameCasillerosDisponibles(fichaStr);
-		Casillero casillero = new CasilleroNegro();
-		casillero.setIdEntity(casilleroStr);
+		List<CasilleroNegro> casillerosDisp = dameCasillerosDisponibles(fichaStr);
+		CasilleroNegro casillero = objectPersistenceService.obtenerCasillero(casilleroStr);
 		if (!validaCasillero(casillero, casillerosDisp)) {
 			return false;
 		}
-		Casillero casilleroAM = casillerosDisp.get(casillerosDisp
-				.indexOf(casillero));
-		if (!validaNoSeElCasilleroPropio(casilleroAM, ficha)) {
-			return false;
-		}
-		ficha.movete(casilleroAM);
+		
+		ficha.movete(casillero);
 		return true;
 	}
 
@@ -92,21 +87,11 @@ public class JuegoDamasListener {
 		return null;
 	}
 
-	public List<Casillero> dameCasillerosDisponibles(String fichaStr) throws NoHayFichaEnCasilleroException, FormatoCasilleroException {
+	public List<CasilleroNegro> dameCasillerosDisponibles(String fichaStr) throws NoHayFichaEnCasilleroException, FormatoCasilleroException {
 		
 		Ficha ficha = objectPersistenceService.dameFicha(FichaNegra.class,fichaStr);
-		Predicate pred = new Predicate() {
-			public boolean evaluate(Object arg0) {
-				Casillero casillero = (Casillero) arg0;
-				if (!casillero.isOcupada()) {
-					return true;
-				}
-				return false;
-			}
-		};
-		Collection reCollection = CollectionUtils.select(ficha
-				.dameCasillerosDisponibles(), pred);
-		return new ArrayList<Casillero>(reCollection);
+		List<CasilleroNegro> casillerosDisponibles = ficha.dameCasillerosDisponibles();
+		return casillerosDisponibles;
 	}
 
 	

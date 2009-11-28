@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
+import servicios.ObjectPersistenceService;
+
 import excepciones.CasilleroOcupadoException;
 import excepciones.NoExisteCasilleroDisponibleException;
 import excepciones.NoHayFichaEnCasilleroException;
@@ -23,11 +25,18 @@ public abstract class Jugador extends Entidad{
 	protected boolean soyGanador=false;
 	protected boolean tieneTurno;
 	
+	private Class entityTypeFicha;
 	
+	public Class getEntityTypeFicha() {
+		return entityTypeFicha;
+	}
+	public void setEntityTypeFicha(Class entityTypeFicha) {
+		this.entityTypeFicha = entityTypeFicha;
+	}
 	protected List<Ficha> fichas;
 	
 	
-	public abstract void poneFichas(List<Casillero> list);
+	public abstract void poneFichas(List<CasilleroNegro> list);
 	public List<Ficha> getFichas() {
 		return fichas;
 	}
@@ -129,7 +138,9 @@ public abstract class Jugador extends Entidad{
 	}
 	
 	public void comeFichaCon(Ficha ficha , Casillero casilleroSeleccionado) throws CasilleroOcupadoException, NoHayFichaEnCasilleroException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException{
-		if(casilleroSeleccionado.isOcupada() && casilleroSeleccionado.ficha.getJugador().getContrincante().equals(this)){
+		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
+		Ficha fichaCasilleroSel = objectPersistenceService.obtenerFicha((CasilleroNegro) casilleroSeleccionado);
+		if(casilleroSeleccionado.isOcupada() && fichaCasilleroSel.getJugador().getContrincante().equals(this)){
 			boolean mueveDerecha = ficha.isDerechaCasillero(casilleroSeleccionado);
 			Casillero casilleroContrincante=null;
 			if(mueveDerecha){
@@ -141,6 +152,11 @@ public abstract class Jugador extends Entidad{
 			ficha.movete(casilleroNuevo);
 			this.finTurno();
 		}
+	}
+	
+	public static Tablero dameTablero(){
+		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
+		return objectPersistenceService.obtenerTablero();
 	}
 	protected abstract Jugador getContrincante() ;
 	public abstract void agregarJugador(Jugador jugadorHumano);
