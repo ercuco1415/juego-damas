@@ -1,16 +1,12 @@
 package servicios;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 
 import persistence.utils.UtilDBInitializer;
 import dominio.Casillero;
 import dominio.CasilleroNegro;
 import dominio.Ficha;
+import dominio.FichaBlanca;
 import dominio.FichaNegra;
 import dominio.Humano;
 import dominio.Jugador;
@@ -18,7 +14,10 @@ import dominio.Maquina;
 import dominio.Tablero;
 import excepciones.CasilleroOcupadoException;
 import excepciones.FormatoCasilleroException;
+import excepciones.NoExisteCasilleroDisponibleException;
 import excepciones.NoHayFichaEnCasilleroException;
+import excepciones.NoPuedoComerFichaException;
+import excepciones.NoTieneFichaContrarioException;
 
 public class JuegoDamasListener {
 
@@ -30,14 +29,6 @@ public class JuegoDamasListener {
 		tablero = new Tablero();
 		jugadorMaquina = new Maquina();
 		jugadorHumano = new Humano();
-	}
-
-	private boolean validaNoSeElCasilleroPropio(Casillero casilleroAM,
-			Ficha ficha) {
-		if (ficha.getCasillero().equals(casilleroAM)) {
-			return false;
-		}
-		return true;
 	}
 
 	private boolean validaCasillero(Casillero casillero, List<CasilleroNegro> casillerosDisp) {
@@ -78,7 +69,6 @@ public class JuegoDamasListener {
 		if (!validaCasillero(casillero, casillerosDisp)) {
 			return false;
 		}
-		
 		ficha.movete(casillero);
 		return true;
 	}
@@ -88,10 +78,37 @@ public class JuegoDamasListener {
 	}
 
 	public List<CasilleroNegro> dameCasillerosDisponibles(String fichaStr) throws NoHayFichaEnCasilleroException, FormatoCasilleroException {
-		
-		Ficha ficha = objectPersistenceService.dameFicha(FichaNegra.class,fichaStr);
+		Ficha ficha=this.obtenerFicha(fichaStr);
 		List<CasilleroNegro> casillerosDisponibles = ficha.dameCasillerosDisponibles();
 		return casillerosDisponibles;
+	}
+
+	public void comeFicha(String fichaStr, String casilleroStr) {
+		Ficha ficha=this.obtenerFicha(fichaStr);
+		CasilleroNegro casillero = objectPersistenceService.obtenerCasillero(casilleroStr);
+		try {
+			CasilleroNegro casilleroNvo = (CasilleroNegro) ficha.comeFicha(casillero);
+			ficha.movete(casilleroNvo);
+		} catch (NoExisteCasilleroDisponibleException e) {
+			throw new RuntimeException(e);
+		} catch (NoTieneFichaContrarioException e) {
+			throw new RuntimeException(e);
+		} catch (NoPuedoComerFichaException e) {
+			throw new RuntimeException(e);
+		} catch (CasilleroOcupadoException e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+	private Ficha obtenerFicha(String fichaStr){
+		Ficha ficha=null;
+		if(fichaStr.contains("fn")){
+			ficha = objectPersistenceService.dameFicha(FichaNegra.class,fichaStr);
+		}
+		if(fichaStr.contains("fb")){
+			ficha = objectPersistenceService.dameFicha(FichaBlanca.class,fichaStr);
+		}
+		return ficha;
 	}
 
 	

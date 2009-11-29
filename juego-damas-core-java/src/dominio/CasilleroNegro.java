@@ -45,7 +45,7 @@ public class CasilleroNegro extends Casillero {
 	public List<CasilleroNegro> getCasillerosDisponibles(){
 		List<CasilleroNegro> casillerosList = new ArrayList<CasilleroNegro>();
 		Ficha ficha = obtenerFicha();
-		if(ficha!= null  && ficha.getEntityType().equals(FichaNegra.class.getName())){
+		if(ficha!= null ){
 			Tablero tablero = Tablero.dameTablero();
 			casillerosList.addAll(vecinoDiagonalDerecha(tablero.getNegros(), ficha.getJugador().soyContrincante(),ficha.getClass()));
 			casillerosList.addAll(vecinoDiagonalIzquierda(tablero.getNegros(), ficha.getJugador().soyContrincante(),ficha.getClass()));
