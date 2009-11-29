@@ -134,7 +134,7 @@ public abstract class Ficha extends Entidad{
 			throw new NoTieneFichaContrarioException("No hay ficha contrario en la casilla");
 		}
 		Tablero tablero = Tablero.dameTablero();
-		boolean esDerecha = esCasilleroDerecha(tablero.getNegros());
+		boolean esDerecha = esCasilleroDerecha(tablero.getNegros(),casillero);
 		Ficha ficha = objectPersistenceService.obtenerFicha((CasilleroNegro) casillero);
 		if(!ficha.tePuedoComer(tablero.getNegros(),esDerecha)){
 			throw new NoPuedoComerFichaException("No se puede comer la ficha");
@@ -143,7 +143,7 @@ public abstract class Ficha extends Entidad{
 		casillero.eliminaFicha();
 		return returnCasillero;
 	}
-	private boolean esCasilleroDerecha(List<CasilleroNegro> casillerosNegros) {
+	private boolean esCasilleroDerecha(List<CasilleroNegro> casillerosNegros, Casillero casillero) {
 		List<CasilleroNegro> casilleros = casillero.vecinoDiagonalDerecha(casillerosNegros, this.jugador.soyContrincante(),this.getClass());
 		if(casilleros != null && !casilleros.isEmpty()){
 			return true;
@@ -154,12 +154,9 @@ public abstract class Ficha extends Entidad{
 		this.jugador.getFichas().remove(this);
 		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
 		this.casillero.desOcupado();
-		objectPersistenceService.guarda(this.casillero);
 		objectPersistenceService.guarda(this.jugador);
 		this.casillero = null;
 		objectPersistenceService.guarda(this);
-		
-		
 	}
 	public boolean esDeContrincante() {
 		return this.jugador.soyContrincante();
