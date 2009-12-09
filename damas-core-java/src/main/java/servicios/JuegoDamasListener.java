@@ -63,14 +63,49 @@ public class JuegoDamasListener {
 	}
 
 	public boolean moveFicha(String fichaStr, String casilleroStr) throws NoHayFichaEnCasilleroException, FormatoCasilleroException,
-			CasilleroOcupadoException {
+			CasilleroOcupadoException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException {
 		Ficha ficha = objectPersistenceService.dameFicha(FichaNegra.class,fichaStr);
 		List<CasilleroNegro> casillerosDisp = dameCasillerosDisponibles(fichaStr);
 		CasilleroNegro casillero = objectPersistenceService.obtenerCasillero(casilleroStr);
 		if (!validaCasillero(casillero, casillerosDisp)) {
 			return false;
 		}
+		//obtengo los casilleros que estan ocupados
+		CasilleroNegro casilleroActual = (CasilleroNegro) ficha.getCasillero();
+		List<CasilleroNegro> casillerosOcupadosADerecha = casilleroActual.obtenerCasillerosOcupadosAdelanteDerecha(ficha.getColor());
+		//obtengo los casilleros que estan desocupados posteriores a los ocupados
+		List<CasilleroNegro> casillerosDesocupadoADerecha= new ArrayList<CasilleroNegro>();
+		for(Casillero casilleroPost: casillerosOcupadosADerecha){
+			String color = (ficha.getColor().equals(Ficha.BLANCA))?Ficha.NEGRA:Ficha.BLANCA;
+			casillerosDesocupadoADerecha.addAll(casilleroPost.obtenerCasillerosDesocupadosIzquierda(color, false));
+		}
+		
+		//obtengo los casilleros que estan ocupados
+		List<CasilleroNegro> casillerosOcupadosAIzquierda= casilleroActual.obtenerCasillerosOcupadosAdelanteIzquierda(ficha.getColor());
+		List<CasilleroNegro> casillerosDesocupadoAIzquierda= new ArrayList<CasilleroNegro>();
+		//obtengo los casilleros que estan desocupados posteriores a los ocupados
+		for(Casillero casilleroPost: casillerosOcupadosAIzquierda){
+			String color = (ficha.getColor().equals(Ficha.BLANCA))?Ficha.NEGRA:Ficha.BLANCA;
+			casillerosDesocupadoAIzquierda.addAll(casilleroPost.obtenerCasillerosDesocupadosDerecha(color, false));
+		}
+		//si los casilleros obtenidos desocupados posteriores a los ocupados contienen al casillero seleccionado a mover
+		if(casillerosDesocupadoADerecha.contains(casillero)){
+			//debo comer la ficha que se encuentra en el casillero anterior a derecha
+			CasilleroNegro casilleroNvo = (CasilleroNegro) ficha.comeFicha(casillerosOcupadosADerecha.get(0));
+			ficha.movete(casilleroNvo);
+			System.out.println("MOVE FICHA: " + fichaStr + " DEL CASILLERO: " + casilleroStr);
+			return true;
+		}
+		//si los casilleros obtenidos desocupados posteriores a los ocupados contienen al casillero seleccionado a mover
+		if(casillerosDesocupadoAIzquierda.contains(casillero)){
+			//debo comer la ficha que se encuentra en el casillero anterior a derecha
+			CasilleroNegro casilleroNvo = (CasilleroNegro) ficha.comeFicha(casillerosOcupadosAIzquierda.get(0));
+			ficha.movete(casilleroNvo);
+			System.out.println("MOVE FICHA: " + fichaStr + " DEL CASILLERO: " + casilleroStr);
+			return true;
+		}
 		ficha.movete(casillero);
+		
 		System.out.println("MOVE FICHA: " + fichaStr + " DEL CASILLERO: " + casilleroStr);
 		return true;
 	}

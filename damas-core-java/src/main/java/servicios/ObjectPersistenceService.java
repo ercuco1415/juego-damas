@@ -10,6 +10,7 @@ import persistence.daos.TableroDao;
 import dominio.CasilleroNegro;
 import dominio.Entidad;
 import dominio.Ficha;
+import dominio.Posicion;
 import dominio.Tablero;
 
 public class ObjectPersistenceService {
@@ -42,10 +43,20 @@ public class ObjectPersistenceService {
 	public Tablero obtenerTablero() {
 		return tableroDao.findAll().iterator().next();
 	}
-	public List<CasilleroNegro> obtenerCasillerosDisponibles(int x, int y,Class clazz) {
-		return casilleroDao.findDisponibles( x,y,clazz);
+	public List<CasilleroNegro> obtenerCasillerosDisponibles(Posicion pos,Class clazz) {
+		List<CasilleroNegro> listResult = casilleroDao.findDesocupado( pos.getX(),pos.getY(),clazz);
+		
+		return listResult;
+	}
+	public List<CasilleroNegro> obtenerCasillerosOcupadosOponente(Posicion pos,String color) {
+		List<CasilleroNegro> listResult = casilleroDao.findOcupadoOponente(pos.getX(),pos.getY(),color);
+		return listResult;
 	}
 	public CasilleroNegro obtenerCasillero(String casilleroStr) {
 		return (CasilleroNegro) casilleroDao.findByIdEntity(CasilleroNegro.class, casilleroStr);
+	}
+	public List<CasilleroNegro> dameFichaCasillerosOcupados(Ficha ficha) {
+//		return (CasilleroNegro) casilleroDao.
+		return null;
 	}
 }
