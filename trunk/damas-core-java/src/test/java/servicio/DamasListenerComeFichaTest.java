@@ -6,12 +6,15 @@ import servicios.JuegoDamasListener;
 
 import excepciones.CasilleroOcupadoException;
 import excepciones.FormatoCasilleroException;
+import excepciones.NoExisteCasilleroDisponibleException;
 import excepciones.NoHayFichaEnCasilleroException;
+import excepciones.NoPuedoComerFichaException;
+import excepciones.NoTieneFichaContrarioException;
 
 public class DamasListenerComeFichaTest {
 
 	@Test
-	public void testComeFicha() throws NoHayFichaEnCasilleroException, FormatoCasilleroException, CasilleroOcupadoException {
+	public void testComeFicha() throws NoHayFichaEnCasilleroException, FormatoCasilleroException, CasilleroOcupadoException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException {
 		JuegoDamasListener damasListener =  new JuegoDamasListener();
 		damasListener.init();
 		System.out.println(damasListener.dameCasillerosDisponibles("fn13").toString());
@@ -20,17 +23,19 @@ public class DamasListenerComeFichaTest {
 		System.out.println(damasListener.dameCasillerosDisponibles("fb11"));
 
 		damasListener.moveFicha("fn13", "x7y4");
-		System.out.println(damasListener.dameCasillerosDisponibles("fn13"));
+		System.out.println("disponibles fb11" +damasListener.dameCasillerosDisponibles("fb11"));
+		System.out.println("disponibles fn13" + damasListener.dameCasillerosDisponibles("fn13"));
 		
 		damasListener.moveFicha("fb11", "x9y6");
-		System.out.println(damasListener.dameCasillerosDisponibles("fb11"));
 		
 		damasListener.moveFicha("fn13", "x8y5");
-		System.out.println(damasListener.dameCasillerosDisponibles("fn13"));
-		
-		damasListener.comeFicha("fb11","x8y5");
-		System.out.println(damasListener.dameCasillerosDisponibles("fb11"));
-		
+		String resultado =  damasListener.dameCasillerosDisponibles("fb11").toString();
+		System.out.println("disponibles fn13" +damasListener.dameCasillerosDisponibles("fn13"));
+		System.out.println("disponibles fb11" +resultado);
+//		damasListener.moveFicha("fb11","x7y4");
+//		System.out.println(damasListener.dameCasillerosDisponibles("fb11"));
+		//retorna [x7y6, x10y5]
+		//debe retornar x7y6, x10y7
 	}
 
 }

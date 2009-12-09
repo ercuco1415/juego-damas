@@ -10,6 +10,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
 
 import persistence.HibernateFactory;
@@ -17,6 +18,7 @@ import persistence.exceptions.DataAccessLayerException;
 import dominio.Casillero;
 import dominio.CasilleroNegro;
 import dominio.Ficha;
+import dominio.FichaBlanca;
 import dominio.FichaNegra;
 
 public class CasilleroDao extends AbstractDao  {
@@ -71,22 +73,12 @@ public class CasilleroDao extends AbstractDao  {
         return unCanal;
     }
 
-	public List<CasilleroNegro> findDisponibles(int x, int y,Class clazz) {
+	public List<CasilleroNegro> findDesocupado(int x, int y,Class clazz) {
 		Session session = null;
 		Transaction tx = null;
 		List<CasilleroNegro> casilleros=null;
 		try {
-//			Map<String, Object> map = new HashMap<String, Object>();
-//			map.put("x", new Integer(x));
-//			map.put("y", new Integer(y));
-//			map.put("ocupado", false);
-//			session = HibernateFactory.openSession();
-//			tx = session.beginTransaction();
-//			String stringHQLFROM = CasilleroNegro.class.getName() + " A  , "  + clazz.getName() + " B " ;
-//			String stringHQLWHERE= "A.x = :x  AND A.y = :y  AND  A.ocupado = :ocupado AND B.entityType = " + clazz.getName(); //AND  B.casillero = A.id 
-//			casilleros = super.findQuery(stringHQLFROM, stringHQLWHERE, map);
-//			tx.commit();
-			
+
 			session = HibernateFactory.openSession();
 			tx = session.beginTransaction();
 			Criteria criteria = session.createCriteria(CasilleroNegro.class).
@@ -94,6 +86,37 @@ public class CasilleroDao extends AbstractDao  {
 			add(Property.forName("y").eq(y)).
 			add(Property.forName("ocupado").eq(false));
 			casilleros = criteria.list();
+			tx.commit();
+			
+		} catch (HibernateException e) {
+			handleException(tx, e);
+		} finally {
+			HibernateFactory.closeSession(session);
+		}
+    	
+        return casilleros;
+	}
+	public List<CasilleroNegro> findOcupadoOponente(int x, int y,String color) {
+		Session session = null;
+		Transaction tx = null;
+		List<CasilleroNegro> casilleros=null;
+		try {
+			Class clazzFicha = null;
+			if(color.equals(Ficha.NEGRA)){
+				clazzFicha = FichaNegra.class;
+			}else{
+					clazzFicha = FichaBlanca.class;
+			}
+			session = HibernateFactory.openSession();
+			tx = session.beginTransaction();
+			
+			casilleros = DetachedCriteria.forClass(clazzFicha,"ficha").
+			createAlias("casillero", "cas").
+			add(Property.forName("cas.x").eq(x)).
+			add(Property.forName("cas.y").eq(y)).
+			add(Property.forName("ficha.color").ne(color)).
+			setProjection( Property.forName("casillero")).getExecutableCriteria(session).list();
+			
 			tx.commit();
 			
 		} catch (HibernateException e) {
