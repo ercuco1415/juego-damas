@@ -18,43 +18,12 @@ public class CasilleroBlanco extends Casillero {
 	public String getEntityType() {
 		return CasilleroBlanco.class.getName();
 	}
-	@Override
-	public List<CasilleroNegro> getVecinos(Ficha ficha,
-			List<CasilleroNegro> casillerosNegros) {
-		System.out.println("No tiene vecinos de interes");
-		return null;
-	}
-	
-	
 	
 	@Override
 	public List<CasilleroNegro> getCasillerosDisponibles() {
 		throw new UnsupportedOperationException("under construction");
 	}
-	@Override
-	public List<CasilleroNegro> vecinoDiagonalDerecha(
-			List<CasilleroNegro> casillerosNegros, boolean soyContrincante,
-			Class class1) {
-		throw new UnsupportedOperationException("under construction");
-	}
-	@Override
-	public List<CasilleroNegro> vecinoDiagonalDerechaAtras(
-			List<CasilleroNegro> casillerosNegros, boolean soyContrincante,
-			Class class1) {
-		throw new UnsupportedOperationException("under construction");
-	}
-	@Override
-	public List<CasilleroNegro> vecinoDiagonalIzquierda(
-			List<CasilleroNegro> casillerosNegros, boolean soyContrincante,
-			Class class1) {
-		throw new UnsupportedOperationException("under construction");
-	}
-	@Override
-	public List<CasilleroNegro> vecinoDiagonalIzquierdaAtras(
-			List<CasilleroNegro> casillerosNegros, boolean soyContrincante,
-			Class class1) {
-		throw new UnsupportedOperationException("under construction");
-	}
+	
 	@Override
 	protected void ocupado() {
 		throw new UnsupportedOperationException("under construction");
@@ -69,6 +38,17 @@ public class CasilleroBlanco extends Casillero {
 	}
 	@Override
 	public Ficha obtenerFicha() {
+		throw new UnsupportedOperationException("under construction");
+	}
+	
+	@Override
+	public List<CasilleroNegro> obtenerCasillerosDesocupadosDerecha(
+			String color, boolean adelante) {
+		throw new UnsupportedOperationException("under construction");
+	}
+	@Override
+	public List<CasilleroNegro> obtenerCasillerosDesocupadosIzquierda(
+			String color, boolean adelante) {
 		throw new UnsupportedOperationException("under construction");
 	}
 	

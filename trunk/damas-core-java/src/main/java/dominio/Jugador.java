@@ -137,22 +137,22 @@ public abstract class Jugador extends Entidad{
 		return casillerosDisponibles;
 	}
 	
-	public void comeFichaCon(Ficha ficha , Casillero casilleroSeleccionado) throws CasilleroOcupadoException, NoHayFichaEnCasilleroException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException{
-		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
-		Ficha fichaCasilleroSel = objectPersistenceService.obtenerFicha((CasilleroNegro) casilleroSeleccionado);
-		if(casilleroSeleccionado.isOcupada() && fichaCasilleroSel.getJugador().getContrincante().equals(this)){
-			boolean mueveDerecha = ficha.isDerechaCasillero(casilleroSeleccionado);
-			Casillero casilleroContrincante=null;
-			if(mueveDerecha){
-				casilleroContrincante= ficha.dameCasilleroDerecha();
-			}else{
-				casilleroContrincante= ficha.dameCasilleroIzquierda();
-			}
-			Casillero casilleroNuevo = ficha.comeFicha(casilleroContrincante);
-			ficha.movete(casilleroNuevo);
-			this.finTurno();
-		}
-	}
+//	public void comeFichaCon(Ficha ficha , Casillero casilleroSeleccionado) throws CasilleroOcupadoException, NoHayFichaEnCasilleroException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException{
+//		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
+//		Ficha fichaCasilleroSel = objectPersistenceService.obtenerFicha((CasilleroNegro) casilleroSeleccionado);
+//		if(casilleroSeleccionado.isOcupada() && fichaCasilleroSel.getJugador().getContrincante().equals(this)){
+//			boolean mueveDerecha = ficha.isDerechaCasillero(casilleroSeleccionado);
+//			Casillero casilleroContrincante=null;
+//			if(mueveDerecha){
+//				casilleroContrincante= ficha.dameCasilleroDerecha();
+//			}else{
+//				casilleroContrincante= ficha.dameCasilleroIzquierda();
+//			}
+//			Casillero casilleroNuevo = ficha.comeFicha(casilleroContrincante);
+//			ficha.movete(casilleroNuevo);
+//			this.finTurno();
+//		}
+//	}
 	
 	public static Tablero dameTablero(){
 		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
