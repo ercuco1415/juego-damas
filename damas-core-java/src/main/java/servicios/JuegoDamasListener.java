@@ -91,16 +91,16 @@ public class JuegoDamasListener {
 		//si los casilleros obtenidos desocupados posteriores a los ocupados contienen al casillero seleccionado a mover
 		if(casillerosDesocupadoADerecha.contains(casillero)){
 			//debo comer la ficha que se encuentra en el casillero anterior a derecha
-			CasilleroNegro casilleroNvo = (CasilleroNegro) ficha.comeFicha(casillerosOcupadosADerecha.get(0));
-			ficha.movete(casilleroNvo);
+			ficha.comeFicha(casillerosOcupadosADerecha.get(0));
+			ficha.movete(casillero);
 			System.out.println("MOVE FICHA: " + fichaStr + " DEL CASILLERO: " + casilleroStr);
 			return true;
 		}
 		//si los casilleros obtenidos desocupados posteriores a los ocupados contienen al casillero seleccionado a mover
 		if(casillerosDesocupadoAIzquierda.contains(casillero)){
 			//debo comer la ficha que se encuentra en el casillero anterior a derecha
-			CasilleroNegro casilleroNvo = (CasilleroNegro) ficha.comeFicha(casillerosOcupadosAIzquierda.get(0));
-			ficha.movete(casilleroNvo);
+			ficha.comeFicha(casillerosOcupadosAIzquierda.get(0));
+			ficha.movete(casillero);
 			System.out.println("MOVE FICHA: " + fichaStr + " DEL CASILLERO: " + casilleroStr);
 			return true;
 		}
@@ -120,23 +120,6 @@ public class JuegoDamasListener {
 		return casillerosDisponibles;
 	}
 
-	public void comeFicha(String fichaStr, String casilleroStr) {
-		Ficha ficha=this.obtenerFicha(fichaStr);
-		CasilleroNegro casillero = objectPersistenceService.obtenerCasillero(casilleroStr);
-		try {
-			CasilleroNegro casilleroNvo = (CasilleroNegro) ficha.comeFicha(casillero);
-			ficha.movete(casilleroNvo);
-		} catch (NoExisteCasilleroDisponibleException e) {
-			throw new RuntimeException(e);
-		} catch (NoTieneFichaContrarioException e) {
-			throw new RuntimeException(e);
-		} catch (NoPuedoComerFichaException e) {
-			throw new RuntimeException(e);
-		} catch (CasilleroOcupadoException e) {
-			throw new RuntimeException(e);
-		}
-		System.out.println("COME FICHA: " + fichaStr + " DEL CASILLERO: " + casilleroStr);
-	}
 	private Ficha obtenerFicha(String fichaStr){
 		Ficha ficha=null;
 		if(fichaStr.contains("fn")){

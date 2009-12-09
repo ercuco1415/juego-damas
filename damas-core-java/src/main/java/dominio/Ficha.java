@@ -126,7 +126,7 @@ public abstract class Ficha extends Entidad{
 	public void movete(Casillero casillero) throws CasilleroOcupadoException {
 		cambiaCasillero(casillero,this.getJugador().getClass());
 	}
-	public Casillero comeFicha(Casillero casillero) throws NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException {
+	public boolean comeFicha(Casillero casillero) throws NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException {
 		if(!casillero.tenesFichaContrario(this.jugador)){
 			throw new NoTieneFichaContrarioException("No hay ficha contrario en la casilla");
 		}
@@ -136,9 +136,8 @@ public abstract class Ficha extends Entidad{
 		if(!ficha.tePuedoComer(tablero.getNegros(),esDerecha)){
 			throw new NoPuedoComerFichaException("No se puede comer la ficha");
 		}
-		Casillero returnCasillero=casillero.dameCasilleroAnterior(this.jugador.soyContrincante(),tablero.getNegros(),esDerecha,this.jugador.getEntityTypeFicha());
 		casillero.eliminaFicha();
-		return returnCasillero;
+		return true;
 	}
 	private boolean esCasilleroDerecha(Casillero casillero) {
 		List<CasilleroNegro> casilleros = this.casillero.obtenerCasillerosDesocupadosDerecha(this.getColor(),true);
