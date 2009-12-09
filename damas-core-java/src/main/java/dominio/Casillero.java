@@ -11,16 +11,13 @@ public abstract class Casillero extends Entidad{
 	private static final long serialVersionUID = -786502683990149694L;
 	protected int x;
 	protected int y;
-	protected List<CasilleroNegro> vecinos;
 	public abstract Ficha obtenerFicha();
 	public abstract boolean isOcupada();
 	protected abstract String getType();
 	protected abstract void ocupado();
 	protected abstract void desOcupado();
-	public abstract List<CasilleroNegro> vecinoDiagonalDerecha(List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1);
-	public abstract List<CasilleroNegro> vecinoDiagonalIzquierda(List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1);
-	public abstract List<CasilleroNegro> vecinoDiagonalDerechaAtras(List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1);
-	public abstract List<CasilleroNegro> vecinoDiagonalIzquierdaAtras(List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1);
+	public abstract List<CasilleroNegro> obtenerCasillerosDesocupadosDerecha(String color,boolean adelante);
+	public abstract List<CasilleroNegro> obtenerCasillerosDesocupadosIzquierda(String color,boolean adelante);
 	public abstract List<CasilleroNegro> getCasillerosDisponibles();
 	@Override
 	public boolean equals(Object obj) {
@@ -47,10 +44,6 @@ public abstract class Casillero extends Entidad{
 	public String toString() {
 		return "x" + this.x + "y" + this.y;
 	}
-	public abstract List<CasilleroNegro> getVecinos(Ficha ficha,List<CasilleroNegro> casillerosNegros);
-	public void setVecinos(List<CasilleroNegro> vecinos) {
-		this.vecinos = vecinos;
-	}
 	public int getX() {
 		return x;
 	}
@@ -64,11 +57,9 @@ public abstract class Casillero extends Entidad{
 		this.y = y;
 	}
 	public boolean tenesFichaContrario(Jugador jugador) {
-		
 		if(!this.isOcupada()){
 			return false;
 		}
-		
 		if(!obtenerFicha().sosDelContrario(jugador)){
 			return false;
 		}
@@ -83,15 +74,15 @@ public abstract class Casillero extends Entidad{
 		Ficha ficha = obtenerFicha();
 		List<CasilleroNegro> casilleros;
 		if(casilleroDerecha){
-			casilleros = vecinoDiagonalIzquierdaAtras(casillasNegras,ficha.esDeContrincante(),ficha.getClass());
-			if(casilleros != null && !casilleros.isEmpty()){
-				casillero = casilleros.get(0);
-			}
+//			casilleros = vecinoDiagonalIzquierdaAtras(ficha);
+//			if(casilleros != null && !casilleros.isEmpty()){
+//				casillero = casilleros.get(0);
+//			}
 		}else{
-			casilleros = vecinoDiagonalDerechaAtras(casillasNegras,ficha.esDeContrincante(),ficha.getClass());
-			if(casilleros != null && !casilleros.isEmpty()){
-				casillero = casilleros.get(0);
-			}
+//			casilleros = vecinoDiagonalDerechaAtras(ficha);
+//			if(casilleros != null && !casilleros.isEmpty()){
+//				casillero = casilleros.get(0);
+//			}
 		}
 		return casillero;
 	}

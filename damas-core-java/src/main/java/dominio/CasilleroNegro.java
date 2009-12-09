@@ -7,12 +7,10 @@ import servicios.ObjectPersistenceService;
 
 public class CasilleroNegro extends Casillero {
 
-
 	private static final long serialVersionUID = -3081298016886815927L;
 	private static final String NEGRO = "NEGRO";
-	private static final String BLANCO = "BLANCO";
 	private boolean ocupado;
-	
+
 	public Boolean getOcupado() {
 		return ocupado;
 	}
@@ -21,106 +19,121 @@ public class CasilleroNegro extends Casillero {
 		this.ocupado = ocupado;
 	}
 
-	public CasilleroNegro(){
+	public CasilleroNegro() {
 		setEntityType(CasilleroNegro.class.getName());
 	}
-	
-	public boolean isOcupada(){
-		if( obtenerFicha() == null && this.getOcupado().equals(Boolean.FALSE)) return false;
+
+	public boolean isOcupada() {
+		if (obtenerFicha() == null && this.getOcupado().equals(Boolean.FALSE))
+			return false;
 		return true;
 	}
+
 	public String getType() {
 		return NEGRO;
 	}
+
 	@Override
 	public String getEntityType() {
 		return CasilleroNegro.class.getName();
 	}
-	public List<CasilleroNegro> getVecinos(Ficha ficha, List<CasilleroNegro> casillerosNegros) {
-		List<CasilleroNegro> casilleros = vecinoDiagonalDerecha(casillerosNegros,!ficha.getColor().equals(BLANCO),ficha.getClass());
-		casilleros.addAll(vecinoDiagonalIzquierda(casillerosNegros, !ficha.getColor().equals(BLANCO),ficha.getClass()));
-		return casilleros;
-	}
-	
-	public List<CasilleroNegro> getCasillerosDisponibles(){
+
+	public List<CasilleroNegro> getCasillerosDisponibles() {
 		List<CasilleroNegro> casillerosList = new ArrayList<CasilleroNegro>();
 		Ficha ficha = obtenerFicha();
-		if(ficha!= null ){
-			Tablero tablero = Tablero.dameTablero();
-			casillerosList.addAll(vecinoDiagonalDerecha(tablero.getNegros(), ficha.getJugador().soyContrincante(),ficha.getClass()));
-			casillerosList.addAll(vecinoDiagonalIzquierda(tablero.getNegros(), ficha.getJugador().soyContrincante(),ficha.getClass()));
-			//TODO falta retornar los casilleros en caso de dama
-//			if( !this.ficha.getJugador().soyContrincante()){
-//				casillerosList.addAll(vecinoDiagonalDerecha(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
-//				casillerosList.addAll(vecinoDiagonalIzquierda(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
-//				
-//			}else{
-//				casillerosList.addAll(vecinoDiagonalDerechaAtras(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
-//				casillerosList.addAll(vecinoDiagonalIzquierdaAtras(this.ficha.getJugador().getTablero().getNegros(), this.ficha.getJugador().soyContrincante()));
-//			}
+		if (ficha != null) {
+			casillerosList.addAll(obtenerCasillerosDesocupadosDerecha(ficha.getColor(),true));
+			List<CasilleroNegro> casillerosPosterioresDerecha = obtenerCasillerosOcupadosAdelanteDerecha(ficha.getColor());
+			for(Casillero casillero: casillerosPosterioresDerecha){
+				String color = (ficha.getColor().equals(Ficha.BLANCA))?Ficha.NEGRA:Ficha.BLANCA;
+				casillerosList.addAll(casillero.obtenerCasillerosDesocupadosIzquierda(color, false));
+			}
+			casillerosList.addAll(obtenerCasillerosDesocupadosIzquierda(ficha.getColor(),true));
+			List<CasilleroNegro> casillerosPosterioresIzquierda = obtenerCasillerosOcupadosAdelanteIzquierda(ficha.getColor());
+			for(Casillero casillero: casillerosPosterioresIzquierda){
+				String color = (ficha.getColor().equals(Ficha.BLANCA))?Ficha.NEGRA:Ficha.BLANCA;
+				casillerosList.addAll(casillero.obtenerCasillerosDesocupadosDerecha(color, false));
+			}
 		}
 		return casillerosList;
 	}
-	public List<CasilleroNegro> vecinoDiagonalDerecha(
-			List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1) {
+	
+	public List<CasilleroNegro> obtenerCasillerosDesocupadosDerecha(String color,boolean adelante) {
+		List<CasilleroNegro> listResult= new ArrayList<CasilleroNegro>();
+		Posicion pos = getPosicionDerecha(color, adelante);
+		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
+		listResult.addAll(objectPersistenceService.obtenerCasillerosDisponibles(pos, color.getClass()));
+		return listResult;
+	}
+	public List<CasilleroNegro> obtenerCasillerosDesocupadosIzquierda(String color,boolean adelante) {
+		List<CasilleroNegro> listResult= new ArrayList<CasilleroNegro>();
+		Posicion pos =  getPosicionIzquierda(color, adelante);
+		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
+		listResult.addAll(objectPersistenceService.obtenerCasillerosDisponibles(pos, color.getClass()));
+		return listResult;
+	}
+	
+	public List<CasilleroNegro> obtenerCasillerosOcupadosAdelanteDerecha(String color) {
+		List<CasilleroNegro> listResult= new ArrayList<CasilleroNegro>();
 
-		int _x,_y;
-		if (!soyContrincante) {
-			_x = this.x - 1;
-			_y = this.y - 1;
-			
-		}else{
-			_x = this.x + 1;
-			_y = this.y + 1;
-			
+		Posicion pos = getPosicionDerecha(color, true);
+		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
+		listResult.addAll(objectPersistenceService.obtenerCasillerosOcupadosOponente(pos, color));
+		return listResult;
+	}
+	public List<CasilleroNegro> obtenerCasillerosOcupadosAdelanteIzquierda(String color) {
+		List<CasilleroNegro> listResult= new ArrayList<CasilleroNegro>();
+		Posicion pos =  getPosicionIzquierda(color, true);
+		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
+		listResult.addAll(objectPersistenceService.obtenerCasillerosOcupadosOponente(pos, color));
+		return listResult;
+	}
+	public Posicion getPosicionDerecha(String color, boolean adelante) {
+		Posicion pos = new Posicion();
+		if (adelante) {
+			if (color.equals(Ficha.BLANCA)) {
+				pos.setX(this.x - 1);
+				pos.setY(this.y - 1);
+			} else if (color.equals(Ficha.NEGRA)) {
+				pos.setX(this.x + 1);
+				pos.setY(this.y + 1);
+			}
+			return pos;
 		}
-		return this.obtenerCasillerosDisponibles(_x, _y,class1);
+		if (color.equals(Ficha.BLANCA)) {
+			pos.setX(this.x - 1);
+			pos.setY(this.y + 1);
+		} else if (color.equals(Ficha.NEGRA)) {
+			pos.setX(this.x + 1);
+			pos.setY(this.y - 1);
+		}
+		return pos;
 	}
 
-	public List<CasilleroNegro> vecinoDiagonalDerechaAtras(
-			List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1) {
-		int _x,_y;
-		if (!soyContrincante) {
-			_x = this.x - 1;
-			_y = this.y + 1;
-		}else{
-			_x = this.x + 1;
-			_y = this.y - 1;
+	public Posicion getPosicionIzquierda(String color, boolean adelante) {
+		Posicion pos = new Posicion();
+		if (adelante) {
+			if (color.equals(Ficha.BLANCA)) {
+				pos.setX(this.x + 1);
+				pos.setY(this.y - 1);
+			} else if (color.equals(Ficha.NEGRA)) {
+				pos.setX(this.x - 1);
+				pos.setY(this.y + 1);
+			}
+			return pos;
 		}
-		return this.obtenerCasillerosDisponibles(_x, _y,class1);
-	}
-	public List<CasilleroNegro> vecinoDiagonalIzquierda(
-			List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1) {
-		int _x,_y;
-		if (!soyContrincante) {
-			_x = this.x + 1;
-			_y = this.y - 1;
-		}else{
-			_x = this.x - 1;
-			_y = this.y + 1;
+		if (color.equals(Ficha.BLANCA)) {
+			pos.setX(this.x + 1);
+			pos.setY(this.y + 1);
+		} else if (color.equals(Ficha.NEGRA)) {
+			pos.setX(this.x - 1);
+			pos.setY(this.y - 1);
 		}
-		return this.obtenerCasillerosDisponibles(_x, _y,class1);
+		return pos;
 	}
-
-	public List<CasilleroNegro> vecinoDiagonalIzquierdaAtras(
-			List<CasilleroNegro> casillerosNegros, boolean soyContrincante, Class class1){
-		int _x,_y;
-		if (!soyContrincante) {
-			_x = this.x + 1;
-			_y = this.y + 1;
-		}else{
-			_x = this.x - 1;
-			_y = this.y - 1;
-		}
-		return this.obtenerCasillerosDisponibles(_x, _y,class1);
-	}
-	public List<CasilleroNegro> obtenerCasillerosDisponibles(int x,int y,Class clazz){
-		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
-		return objectPersistenceService.obtenerCasillerosDisponibles(x,y,clazz);
-	}
-	public Ficha obtenerFicha(){
-		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
-		return objectPersistenceService.obtenerFicha(this) ;
+	public Ficha obtenerFicha() {
+		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
+		return objectPersistenceService.obtenerFicha(this);
 	}
 
 	@Override
@@ -128,7 +141,7 @@ public class CasilleroNegro extends Casillero {
 		this.ocupado = Boolean.TRUE;
 		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
 		objectPersistenceService.guarda(this);
-		
+
 	}
 
 	@Override
@@ -137,5 +150,5 @@ public class CasilleroNegro extends Casillero {
 		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
 		objectPersistenceService.guarda(this);
 	}
-	
+
 }
