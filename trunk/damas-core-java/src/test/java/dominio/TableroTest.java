@@ -9,7 +9,7 @@ import excepciones.NoPuedoComerFichaException;
 import excepciones.NoTieneFichaContrarioException;
 
 
-public class TableroTest extends AbstractTestJugar{
+public class TableroTest extends AbstractTestJugar {
 	@Test
 	public void init(){
 		

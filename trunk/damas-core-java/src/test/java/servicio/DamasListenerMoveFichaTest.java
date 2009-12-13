@@ -1,10 +1,11 @@
 package servicio;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import servicios.JuegoDamasListener;
+import servicios.IJuegoDamasListener;
+import servicios.utils.ServiceLocator;
 import excepciones.CasilleroOcupadoException;
 import excepciones.FormatoCasilleroException;
 import excepciones.NoExisteCasilleroDisponibleException;
@@ -16,7 +17,7 @@ public class DamasListenerMoveFichaTest {
 
 	@Test
 	public void testDameCasillerosDisponibles() throws NoHayFichaEnCasilleroException, FormatoCasilleroException, CasilleroOcupadoException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException {
-		JuegoDamasListener damasListener =  new JuegoDamasListener();
+		IJuegoDamasListener damasListener =  (IJuegoDamasListener) ServiceLocator.getInstance().getService(IJuegoDamasListener.class);
 		damasListener.init();
 		String antes = damasListener.dameCasillerosDisponibles("fn13").toString();
 		damasListener.moveFicha("fn13", "x5y4");
