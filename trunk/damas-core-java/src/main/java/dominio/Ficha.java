@@ -2,6 +2,7 @@ package dominio;
 
 import java.util.List;
 
+import servicios.IObjectPersistenceService;
 import servicios.ObjectPersistenceService;
 
 import excepciones.CasilleroOcupadoException;
@@ -19,7 +20,19 @@ public abstract class Ficha extends Entidad{
 	private String color;
 	private Casillero casillero;
 	private Jugador jugador;
-	private ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
+	private String visible;
+	
+	public void desaparece(){
+		this.visible = "display:block";
+	}
+	public String getVisible() {
+		return visible;
+	}
+
+
+	public void setVisible(String visible) {
+		this.visible = visible;
+	}
 	public void setCasillero(Casillero casillero) {
 		this.casillero = casillero;
 	}
@@ -88,7 +101,7 @@ public abstract class Ficha extends Entidad{
 		this.casillero.desOcupado();
 		casillero2.ocupado();
 		this.casillero = casillero2;
-		objectPersistenceService.guarda(this);
+		getObjectPersistenceService().guarda(this);
 	}
 	
 	public List<CasilleroNegro> dameCasillerosDisponibles(){
@@ -130,9 +143,9 @@ public abstract class Ficha extends Entidad{
 		if(!casillero.tenesFichaContrario(this.jugador)){
 			throw new NoTieneFichaContrarioException("No hay ficha contrario en la casilla");
 		}
-		Tablero tablero = Tablero.dameTablero();
+		Tablero tablero = getObjectPersistenceService().obtenerTablero();
 		boolean esDerecha = esCasilleroDerecha(casillero);
-		Ficha ficha = objectPersistenceService.obtenerFicha((CasilleroNegro) casillero);
+		Ficha ficha = getObjectPersistenceService().obtenerFicha((CasilleroNegro) casillero);
 		if(!ficha.tePuedoComer(tablero.getNegros(),esDerecha)){
 			throw new NoPuedoComerFichaException("No se puede comer la ficha");
 		}
@@ -148,10 +161,11 @@ public abstract class Ficha extends Entidad{
 	}
 	public void eliminate() {
 		this.jugador.getFichas().remove(this);
-		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
+		IObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
 		this.casillero.desOcupado();
 		objectPersistenceService.guarda(this.jugador);
 		this.casillero = null;
+		this.desaparece();
 		objectPersistenceService.guarda(this);
 	}
 	public boolean esDeContrincante() {
@@ -159,7 +173,7 @@ public abstract class Ficha extends Entidad{
 	}
 	public boolean isDerechaCasillero(Casillero casilleroSeleccionado) throws NoExisteCasilleroDisponibleException{
 		boolean result=false;
-		Ficha ficha = objectPersistenceService.obtenerFicha((CasilleroNegro) casilleroSeleccionado);
+		Ficha ficha = getObjectPersistenceService().obtenerFicha((CasilleroNegro) casilleroSeleccionado);
 		if(casilleroSeleccionado.isOcupada() && !ficha.jugador.equals(this.jugador)){
 			Casillero miCasillero = ficha.dameCasilleroDerecha();
 			result = this.casillero.equals(miCasillero);

@@ -7,13 +7,8 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
-import servicios.ObjectPersistenceService;
-
 import excepciones.CasilleroOcupadoException;
-import excepciones.NoExisteCasilleroDisponibleException;
 import excepciones.NoHayFichaEnCasilleroException;
-import excepciones.NoPuedoComerFichaException;
-import excepciones.NoTieneFichaContrarioException;
 
 
 public abstract class Jugador extends Entidad{
@@ -137,27 +132,6 @@ public abstract class Jugador extends Entidad{
 		return casillerosDisponibles;
 	}
 	
-//	public void comeFichaCon(Ficha ficha , Casillero casilleroSeleccionado) throws CasilleroOcupadoException, NoHayFichaEnCasilleroException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException{
-//		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
-//		Ficha fichaCasilleroSel = objectPersistenceService.obtenerFicha((CasilleroNegro) casilleroSeleccionado);
-//		if(casilleroSeleccionado.isOcupada() && fichaCasilleroSel.getJugador().getContrincante().equals(this)){
-//			boolean mueveDerecha = ficha.isDerechaCasillero(casilleroSeleccionado);
-//			Casillero casilleroContrincante=null;
-//			if(mueveDerecha){
-//				casilleroContrincante= ficha.dameCasilleroDerecha();
-//			}else{
-//				casilleroContrincante= ficha.dameCasilleroIzquierda();
-//			}
-//			Casillero casilleroNuevo = ficha.comeFicha(casilleroContrincante);
-//			ficha.movete(casilleroNuevo);
-//			this.finTurno();
-//		}
-//	}
-	
-	public static Tablero dameTablero(){
-		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
-		return objectPersistenceService.obtenerTablero();
-	}
 	protected abstract Jugador getContrincante() ;
 	public abstract void agregarJugador(Jugador jugadorHumano);
 	public abstract void tenesTurno() ;

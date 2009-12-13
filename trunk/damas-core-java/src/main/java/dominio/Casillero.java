@@ -4,13 +4,18 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import excepciones.NoExisteCasilleroDisponibleException;
-
 public abstract class Casillero extends Entidad{
 	
 	private static final long serialVersionUID = -786502683990149694L;
 	protected int x;
 	protected int y;
+	private String style;
+	public String getStyle() {
+		return style;
+	}
+	public void setStyle(String style) {
+		this.style = style;
+	}
 	public abstract Ficha obtenerFicha();
 	public abstract boolean isOcupada();
 	protected abstract String getType();
@@ -68,26 +73,10 @@ public abstract class Casillero extends Entidad{
 	public void eliminaFicha() {
 		obtenerFicha().eliminate();
 	}
-	public Casillero dameCasilleroAnterior(boolean soyContrincante,
-			List<CasilleroNegro> casillasNegras, boolean casilleroDerecha, Class class1) throws NoExisteCasilleroDisponibleException {
-		Casillero casillero = null;
-		Ficha ficha = obtenerFicha();
-		List<CasilleroNegro> casilleros;
-		if(casilleroDerecha){
-//			casilleros = vecinoDiagonalIzquierdaAtras(ficha);
-//			if(casilleros != null && !casilleros.isEmpty()){
-//				casillero = casilleros.get(0);
-//			}
-		}else{
-//			casilleros = vecinoDiagonalDerechaAtras(ficha);
-//			if(casilleros != null && !casilleros.isEmpty()){
-//				casillero = casilleros.get(0);
-//			}
-		}
-		return casillero;
-	}
+	
 	public void generateId() {
 		this.setIdEntity(this.toString());
+		this.setStyle(EnumPosicionesTablero.get(this.toString()).getValue());
 	}
 	
 }

@@ -7,8 +7,6 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
-import servicios.ObjectPersistenceService;
-
 public class Tablero extends Entidad{
 	
 	private static final long serialVersionUID = 2131207467858074405L;
@@ -41,15 +39,8 @@ public class Tablero extends Entidad{
 					casillero.setY(y);
 					casillero.generateId();
 					casillero.setOcupado(Boolean.FALSE);
-//					CasilleroDao casilleroDao = new CasilleroDao();
-//					casilleroDao.create(casillero);
-//					
 					casilleros.add(casillero);
 				} 
-//				
-//				else {
-//					casillero = new CasilleroBlanco();
-//				}
 			}
 		}
 	}
@@ -101,9 +92,4 @@ public class Tablero extends Entidad{
 	public void setCasilleros(List<Casillero> casilleros) {
 		this.casilleros = casilleros;
 	}
-	public static Tablero dameTablero(){
-		ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
-		return objectPersistenceService.obtenerTablero();
-	}
-
 }

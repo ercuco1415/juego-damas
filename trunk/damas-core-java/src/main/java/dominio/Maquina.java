@@ -65,12 +65,7 @@ public class Maquina  extends Jugador{
 	}
 	
 	public static Jugador dameJugador(){
-//		com.db4o.query.Predicate predicate = new com.db4o.query.Predicate(){
-//		    public boolean match(Maquina maquina) {
-//		        return maquina.getNombre().equals("MAQUINA");
-//		    }
-//		};
-		List<Entidad> resultList = null;//managerDataBase.executeQuery(predicate);
+		List<Entidad> resultList = null;
 		if(resultList != null && !resultList.isEmpty()){
 			return (Jugador) (new ArrayList(resultList)).get(0);
 		}
