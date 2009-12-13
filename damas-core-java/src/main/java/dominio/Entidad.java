@@ -5,6 +5,9 @@ import java.io.Serializable;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.HibernateProxyHelper;
 
+import servicios.IObjectPersistenceService;
+import servicios.utils.ServiceLocator;
+
 public abstract class Entidad implements Serializable {
 
 	private static final long serialVersionUID = -4003897191290483394L;
@@ -56,5 +59,8 @@ public abstract class Entidad implements Serializable {
 		}
 
 		return false;
+	}
+	protected IObjectPersistenceService getObjectPersistenceService(){
+		return (IObjectPersistenceService) ServiceLocator.getInstance().getService(IObjectPersistenceService.class);
 	}
 }

@@ -54,12 +54,7 @@ public class Humano extends Jugador {
 	}
 
 	public static Jugador dameJugador() {
-		// com.db4o.query.Predicate predicate = new com.db4o.query.Predicate(){
-		// public boolean match(Humano humano) {
-		// return humano.getNombre().equals("CHOMA");
-		// }
-		// };
-		List<Entidad> resultList = null;// managerDataBase.executeQuery(predicate);
+		List<Entidad> resultList = null;
 		if (resultList != null && !resultList.isEmpty()) {
 			System.out.println("cantidad de objetos: " + resultList.size());
 			return (Jugador) (new ArrayList(resultList)).get(0);

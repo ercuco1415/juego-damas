@@ -3,7 +3,8 @@ package dominio;
 import java.util.ArrayList;
 import java.util.List;
 
-import servicios.ObjectPersistenceService;
+import servicios.IObjectPersistenceService;
+import servicios.utils.ServiceLocator;
 
 public class CasilleroNegro extends Casillero {
 
@@ -61,15 +62,13 @@ public class CasilleroNegro extends Casillero {
 	public List<CasilleroNegro> obtenerCasillerosDesocupadosDerecha(String color,boolean adelante) {
 		List<CasilleroNegro> listResult= new ArrayList<CasilleroNegro>();
 		Posicion pos = getPosicionDerecha(color, adelante);
-		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
-		listResult.addAll(objectPersistenceService.obtenerCasillerosDisponibles(pos, color.getClass()));
+		listResult.addAll(getObjectPersistenceService().obtenerCasillerosDisponibles(pos, color.getClass()));
 		return listResult;
 	}
 	public List<CasilleroNegro> obtenerCasillerosDesocupadosIzquierda(String color,boolean adelante) {
 		List<CasilleroNegro> listResult= new ArrayList<CasilleroNegro>();
 		Posicion pos =  getPosicionIzquierda(color, adelante);
-		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
-		listResult.addAll(objectPersistenceService.obtenerCasillerosDisponibles(pos, color.getClass()));
+		listResult.addAll(getObjectPersistenceService().obtenerCasillerosDisponibles(pos, color.getClass()));
 		return listResult;
 	}
 	
@@ -77,15 +76,13 @@ public class CasilleroNegro extends Casillero {
 		List<CasilleroNegro> listResult= new ArrayList<CasilleroNegro>();
 
 		Posicion pos = getPosicionDerecha(color, true);
-		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
-		listResult.addAll(objectPersistenceService.obtenerCasillerosOcupadosOponente(pos, color));
+		listResult.addAll(getObjectPersistenceService().obtenerCasillerosOcupadosOponente(pos, color));
 		return listResult;
 	}
 	public List<CasilleroNegro> obtenerCasillerosOcupadosAdelanteIzquierda(String color) {
 		List<CasilleroNegro> listResult= new ArrayList<CasilleroNegro>();
 		Posicion pos =  getPosicionIzquierda(color, true);
-		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
-		listResult.addAll(objectPersistenceService.obtenerCasillerosOcupadosOponente(pos, color));
+		listResult.addAll(getObjectPersistenceService().obtenerCasillerosOcupadosOponente(pos, color));
 		return listResult;
 	}
 	public Posicion getPosicionDerecha(String color, boolean adelante) {
@@ -132,23 +129,20 @@ public class CasilleroNegro extends Casillero {
 		return pos;
 	}
 	public Ficha obtenerFicha() {
-		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
-		return objectPersistenceService.obtenerFicha(this);
+		return getObjectPersistenceService().obtenerFicha(this);
 	}
 
 	@Override
 	protected void ocupado() {
 		this.ocupado = Boolean.TRUE;
-		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
-		objectPersistenceService.guarda(this);
+		getObjectPersistenceService().guarda(this);
 
 	}
 
 	@Override
 	protected void desOcupado() {
 		this.ocupado = Boolean.FALSE;
-		ObjectPersistenceService objectPersistenceService = new ObjectPersistenceService();
-		objectPersistenceService.guarda(this);
+		getObjectPersistenceService().guarda(this);
 	}
-
+	
 }

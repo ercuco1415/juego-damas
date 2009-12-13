@@ -9,6 +9,7 @@ public class FichaNegra extends Ficha {
 		this.setColor(Ficha.NEGRA);
 		setEntityType(getEntityType());
 		this.setIdEntity( this.getColor() + i);
+		this.setVisible("display:inline");
 	}
 	@Override
 	public String getEntityType() {

@@ -13,6 +13,7 @@ public class FichaBlanca extends Ficha {
 		this.setColor(Ficha.BLANCA);
 		setEntityType(getEntityType());
 		this.setIdEntity( this.getColor() + i);
+		this.setVisible("display:inline");
 	}
 
 }
