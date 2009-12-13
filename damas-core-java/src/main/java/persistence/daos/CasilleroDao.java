@@ -21,32 +21,50 @@ import dominio.Ficha;
 import dominio.FichaBlanca;
 import dominio.FichaNegra;
 
-public class CasilleroDao extends AbstractDao  {
+public class CasilleroDao extends AbstractDao implements ICasilleroDao  {
   
     public CasilleroDao() {
         super();
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ICasilleroDao#create(dominio.Casillero)
+	 */
     public void create(Casillero casillero) throws DataAccessLayerException {
         super.save(casillero);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ICasilleroDao#delete(dominio.Casillero)
+	 */
     public void delete(Casillero casillero) throws DataAccessLayerException {
         super.delete(casillero);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ICasilleroDao#find(java.lang.Long)
+	 */
     public Casillero find(Long id) throws DataAccessLayerException {
         return (Casillero) super.find(Casillero.class, id);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ICasilleroDao#update(dominio.Casillero)
+	 */
     public void update(Casillero casillero) throws DataAccessLayerException {
         super.update(casillero);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ICasilleroDao#findAll()
+	 */
     @SuppressWarnings("unchecked")
     public List<Casillero> findAll() throws DataAccessLayerException {
         return super.findAll(Casillero.class);
     }
+    /* (non-Javadoc)
+	 * @see persistence.daos.ICasilleroDao#findByNombre(java.lang.String)
+	 */
     @SuppressWarnings("unchecked")
     public Casillero findByNombre(String nombre) throws DataAccessLayerException {
     	Casillero unCanal = null;
@@ -73,6 +91,9 @@ public class CasilleroDao extends AbstractDao  {
         return unCanal;
     }
 
+	/* (non-Javadoc)
+	 * @see persistence.daos.ICasilleroDao#findDesocupado(int, int, java.lang.Class)
+	 */
 	public List<CasilleroNegro> findDesocupado(int x, int y,Class clazz) {
 		Session session = null;
 		Transaction tx = null;
@@ -96,6 +117,9 @@ public class CasilleroDao extends AbstractDao  {
     	
         return casilleros;
 	}
+	/* (non-Javadoc)
+	 * @see persistence.daos.ICasilleroDao#findOcupadoOponente(int, int, java.lang.String)
+	 */
 	public List<CasilleroNegro> findOcupadoOponente(int x, int y,String color) {
 		Session session = null;
 		Transaction tx = null;

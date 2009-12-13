@@ -16,28 +16,43 @@ import dominio.Ficha;
 import dominio.FichaBlanca;
 import dominio.FichaNegra;
 
-public class FichaDao extends AbstractDao  {
+public class FichaDao extends AbstractDao implements IFichaDao  {
   
     public FichaDao() {
         super();
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IFichaDao#create(dominio.Ficha)
+	 */
     public void create(Ficha ficha) throws DataAccessLayerException {
         super.save(ficha);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IFichaDao#delete(dominio.Ficha)
+	 */
     public void delete(Ficha ficha) throws DataAccessLayerException {
         super.delete(ficha);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IFichaDao#find(java.lang.Long)
+	 */
     public Ficha find(Long id) throws DataAccessLayerException {
         return (Ficha) super.find(Ficha.class, id);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IFichaDao#update(dominio.Ficha)
+	 */
     public void update(Ficha ficha) throws DataAccessLayerException {
         super.update(ficha);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IFichaDao#findAll()
+	 */
     @SuppressWarnings("unchecked")
     public List<Ficha> findAll() throws DataAccessLayerException {
         return super.findAll(Ficha.class);
@@ -46,6 +61,9 @@ public class FichaDao extends AbstractDao  {
    
 	
 
+	/* (non-Javadoc)
+	 * @see persistence.daos.IFichaDao#findBlanca(dominio.CasilleroNegro)
+	 */
 	public Ficha findBlanca(CasilleroNegro casilleroNegro) {
 		Ficha ficha = null;
 		Session session = null;
@@ -68,6 +86,9 @@ public class FichaDao extends AbstractDao  {
     	
         return ficha;
 	}
+	/* (non-Javadoc)
+	 * @see persistence.daos.IFichaDao#findNegra(dominio.CasilleroNegro)
+	 */
 	public Ficha findNegra(CasilleroNegro casilleroNegro) {
 		Ficha ficha = null;
 		Session session = null;
