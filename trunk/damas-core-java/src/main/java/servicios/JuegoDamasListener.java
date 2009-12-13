@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import persistence.utils.UtilDBInitializer;
+import servicios.utils.ServiceLocator;
 import dominio.Casillero;
 import dominio.CasilleroNegro;
 import dominio.Ficha;
@@ -20,16 +21,17 @@ import excepciones.NoHayFichaEnCasilleroException;
 import excepciones.NoPuedoComerFichaException;
 import excepciones.NoTieneFichaContrarioException;
 
-public class JuegoDamasListener {
+public class JuegoDamasListener implements IJuegoDamasListener {
+	private IObjectPersistenceService objectPersistenceService;
+	public JuegoDamasListener() {}
 
-	protected Tablero tablero;
-	protected Jugador jugadorMaquina;
-	protected Jugador jugadorHumano;
-	private ObjectPersistenceService objectPersistenceService= new ObjectPersistenceService();
-	public JuegoDamasListener() {
-		tablero = new Tablero();
-		jugadorMaquina = new Maquina();
-		jugadorHumano = new Humano();
+	public IObjectPersistenceService getObjectPersistenceService() {
+		return (IObjectPersistenceService) ServiceLocator.getInstance().getService(IObjectPersistenceService.class);
+	}
+
+	public void setObjectPersistenceService(
+			IObjectPersistenceService objectPersistenceService) {
+		this.objectPersistenceService = objectPersistenceService;
 	}
 
 	private boolean validaCasillero(Casillero casillero, List<CasilleroNegro> casillerosDisp) {
@@ -41,32 +43,38 @@ public class JuegoDamasListener {
 		}
 		return true;
 	}
-
-	
-	public void init() {
-		
+	/* (non-Javadoc)
+	 * @see servicios.IJuegoDamasListener#init()
+	 */
+	public void inizializarBase(){
 		UtilDBInitializer.initDropCreate();
-		objectPersistenceService.guarda(tablero);
-		
+	}
+	public void init() {
+		System.out.println("INICIO DE JUEGO");
+		inizializarBase();
+		inicializarJugada();
+		System.out.println("INICIO DE JUEGO");
+	}
+	public void inicializarJugada(){
+		Tablero tablero = new Tablero();
+		Jugador jugadorMaquina = new Maquina();
+		Jugador jugadorHumano = new Humano();
+		getObjectPersistenceService().guarda(tablero);
 		jugadorHumano.poneFichas(tablero.getNegros());
 		jugadorMaquina.poneFichas(tablero.getNegros());
-		objectPersistenceService.guarda(jugadorHumano);
-		objectPersistenceService.guarda(jugadorMaquina);
-		
+		getObjectPersistenceService().guarda(jugadorHumano);
+		getObjectPersistenceService().guarda(jugadorMaquina);
 		jugadorMaquina.agregarJugador(jugadorHumano);
 		jugadorHumano.agregarJugador(jugadorMaquina);
 		jugadorMaquina.tenesTurno();
-		
-		objectPersistenceService.guarda(jugadorHumano);
-		objectPersistenceService.guarda(jugadorMaquina);
-		
+		getObjectPersistenceService().guarda(jugadorHumano);
+		getObjectPersistenceService().guarda(jugadorMaquina);
 	}
-
 	public boolean moveFicha(String fichaStr, String casilleroStr) throws NoHayFichaEnCasilleroException, FormatoCasilleroException,
 			CasilleroOcupadoException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException {
-		Ficha ficha = objectPersistenceService.dameFicha(FichaNegra.class,fichaStr);
+		Ficha ficha = getObjectPersistenceService().dameFicha(FichaNegra.class,fichaStr);
 		List<CasilleroNegro> casillerosDisp = dameCasillerosDisponibles(fichaStr);
-		CasilleroNegro casillero = objectPersistenceService.obtenerCasillero(casilleroStr);
+		CasilleroNegro casillero = getObjectPersistenceService().obtenerCasillero(casilleroStr);
 		if (!validaCasillero(casillero, casillerosDisp)) {
 			return false;
 		}
@@ -79,7 +87,6 @@ public class JuegoDamasListener {
 			String color = (ficha.getColor().equals(Ficha.BLANCA))?Ficha.NEGRA:Ficha.BLANCA;
 			casillerosDesocupadoADerecha.addAll(casilleroPost.obtenerCasillerosDesocupadosIzquierda(color, false));
 		}
-		
 		//obtengo los casilleros que estan ocupados
 		List<CasilleroNegro> casillerosOcupadosAIzquierda= casilleroActual.obtenerCasillerosOcupadosAdelanteIzquierda(ficha.getColor());
 		List<CasilleroNegro> casillerosDesocupadoAIzquierda= new ArrayList<CasilleroNegro>();
@@ -105,46 +112,57 @@ public class JuegoDamasListener {
 			return true;
 		}
 		ficha.movete(casillero);
-		
 		System.out.println("MOVE FICHA: " + fichaStr + " DEL CASILLERO: " + casilleroStr);
 		return true;
 	}
-
+	/* (non-Javadoc)
+	 * @see servicios.IJuegoDamasListener#botMueveACasillero()
+	 */
 	public String botMueveACasillero() {
+		System.out.println("MUEVE LA MAQUINA");
 		return null;
 	}
-
+	/* (non-Javadoc)
+	 * @see servicios.IJuegoDamasListener#dameCasillerosDisponibles(java.lang.String)
+	 */
 	public List<CasilleroNegro> dameCasillerosDisponibles(String fichaStr) throws NoHayFichaEnCasilleroException, FormatoCasilleroException {
 		Ficha ficha=this.obtenerFicha(fichaStr);
 		List<CasilleroNegro> casillerosDisponibles = ficha.dameCasillerosDisponibles();
 		return casillerosDisponibles;
 	}
-
 	private Ficha obtenerFicha(String fichaStr){
 		Ficha ficha=null;
 		if(fichaStr.contains("fn")){
-			ficha = objectPersistenceService.dameFicha(FichaNegra.class,fichaStr);
+			ficha = getObjectPersistenceService().dameFicha(FichaNegra.class,fichaStr);
 		}
 		if(fichaStr.contains("fb")){
-			ficha = objectPersistenceService.dameFicha(FichaBlanca.class,fichaStr);
+			ficha = getObjectPersistenceService().dameFicha(FichaBlanca.class,fichaStr);
 		}
 		return ficha;
 	}
+	/* (non-Javadoc)
+	 * @see servicios.IJuegoDamasListener#dameFichasBlancas()
+	 */
 	public List<Ficha> dameFichasBlancas(){
 		List<Ficha> fichas = new ArrayList<Ficha>();
-		fichas.addAll(this.jugadorMaquina.getFichas());
+		Jugador jugador = getObjectPersistenceService().dameJugadorMaquina();
+		fichas.addAll(jugador.getFichas());
 		return fichas;
 	}
-
+	/* (non-Javadoc)
+	 * @see servicios.IJuegoDamasListener#dameCasillerosNegros()
+	 */
 	public List<CasilleroNegro> dameCasillerosNegros() {
-		return this.tablero.getNegros();
+		Tablero tablero =getObjectPersistenceService().obtenerTablero();
+		return tablero.getNegros();
 	}
-
+	/* (non-Javadoc)
+	 * @see servicios.IJuegoDamasListener#dameFichasNegras()
+	 */
 	public List<Ficha> dameFichasNegras() {
 		List<Ficha> fichas = new ArrayList<Ficha>();
-		fichas.addAll(this.jugadorHumano.getFichas());
+		Jugador jugador = getObjectPersistenceService().dameJugadorHumano();
+		fichas.addAll(jugador.getFichas());
 		return fichas;
 	}
-	
-	
 }

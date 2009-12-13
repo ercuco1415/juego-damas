@@ -14,33 +14,51 @@ import persistence.HibernateFactory;
 import persistence.exceptions.DataAccessLayerException;
 import dominio.Tablero;
 
-public class TableroDao extends AbstractDao  {
+public class TableroDao extends AbstractDao implements ITableroDao  {
   
     public TableroDao() {
         super();
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ITableroDao#create(dominio.Tablero)
+	 */
     public void create(Tablero tablero) throws DataAccessLayerException {
         super.save(tablero);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ITableroDao#delete(dominio.Tablero)
+	 */
     public void delete(Tablero tablero) throws DataAccessLayerException {
         super.delete(tablero);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ITableroDao#find(java.lang.Long)
+	 */
     public Tablero find(Long id) throws DataAccessLayerException {
         return (Tablero) super.find(Tablero.class, id);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ITableroDao#update(dominio.Tablero)
+	 */
     public void update(Tablero tablero) throws DataAccessLayerException {
         super.update(tablero);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ITableroDao#findAll()
+	 */
     @SuppressWarnings("unchecked")
     public List<Tablero> findAll() throws DataAccessLayerException {
         return super.findAll(Tablero.class);
     }
    
+    /* (non-Javadoc)
+	 * @see persistence.daos.ITableroDao#filtrarCanales(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer)
+	 */
     @SuppressWarnings("unchecked")
     public List<Tablero> filtrarCanales(String nombre, String orden, Integer pagina,
         Integer cantPagina) throws DataAccessLayerException {
@@ -53,6 +71,9 @@ public class TableroDao extends AbstractDao  {
     }
 
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.ITableroDao#findByNombre(java.lang.String)
+	 */
     @SuppressWarnings("unchecked")
     public Tablero findByNombre(String nombreCanal) throws DataAccessLayerException {
     	Tablero unCanal = null;

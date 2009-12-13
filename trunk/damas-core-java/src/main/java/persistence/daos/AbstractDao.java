@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -16,17 +15,13 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.LazyInitializer;
-
-import dominio.Entidad;
-import dominio.Ficha;
 
 import persistence.HibernateFactory;
 import persistence.exceptions.DataAccessLayerException;
+import dominio.Entidad;
 
 
-public abstract class AbstractDao {
+public abstract class AbstractDao implements IAbstractDao {
 
 	private static final Logger logger = Logger.getLogger(AbstractDao.class);
 
@@ -92,6 +87,9 @@ public abstract class AbstractDao {
 		
 		return obj;
 	}
+	/* (non-Javadoc)
+	 * @see persistence.daos.IAbstractDao#findByIdEntity(java.lang.Class, java.lang.String)
+	 */
 	public Entidad findByIdEntity(Class clazz,String idEntity) {
 		Entidad entidad = null;
 		Session session = null;

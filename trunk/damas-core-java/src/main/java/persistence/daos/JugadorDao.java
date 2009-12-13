@@ -14,33 +14,51 @@ import persistence.HibernateFactory;
 import persistence.exceptions.DataAccessLayerException;
 import dominio.Jugador;
 
-public class JugadorDao extends AbstractDao  {
+public class JugadorDao extends AbstractDao implements IJugadorDao  {
   
     public JugadorDao() {
         super();
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IJugadorDao#create(dominio.Jugador)
+	 */
     public void create(Jugador jugador) throws DataAccessLayerException {
         super.save(jugador);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IJugadorDao#delete(dominio.Jugador)
+	 */
     public void delete(Jugador jugador) throws DataAccessLayerException {
         super.delete(jugador);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IJugadorDao#find(java.lang.Long)
+	 */
     public Jugador find(Long id) throws DataAccessLayerException {
         return (Jugador) super.find(Jugador.class, id);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IJugadorDao#update(dominio.Jugador)
+	 */
     public void update(Jugador jugador) throws DataAccessLayerException {
         super.update(jugador);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IJugadorDao#findAll()
+	 */
     @SuppressWarnings("unchecked")
     public List<Jugador> findAll() throws DataAccessLayerException {
         return super.findAll(Jugador.class);
     }
    
+    /* (non-Javadoc)
+	 * @see persistence.daos.IJugadorDao#filtrarCanales(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer)
+	 */
     @SuppressWarnings("unchecked")
     public List<Jugador> filtrarCanales(String nombre, String orden, Integer pagina,
         Integer cantPagina) throws DataAccessLayerException {
@@ -53,6 +71,9 @@ public class JugadorDao extends AbstractDao  {
     }
 
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IJugadorDao#findByNombre(java.lang.String)
+	 */
     @SuppressWarnings("unchecked")
     public Jugador findByNombre(String nombreCanal) throws DataAccessLayerException {
     	Jugador unCanal = null;

@@ -14,32 +14,50 @@ import persistence.HibernateFactory;
 import persistence.exceptions.DataAccessLayerException;
 import dominio.Entidad;
 
-public class EntityDao extends AbstractDao  {
+public class EntityDao extends AbstractDao implements IEntityDao  {
   
     public EntityDao() {
         super();
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IEntityDao#create(dominio.Entidad)
+	 */
     public void create(Entidad entity) throws DataAccessLayerException {
     	super.save(entity);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IEntityDao#delete(dominio.Entidad)
+	 */
     public void delete(Entidad entity) throws DataAccessLayerException {
         super.delete(entity);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IEntityDao#find(java.lang.Long)
+	 */
     public Entidad find(Long id) throws DataAccessLayerException {
         return (Entidad) super.find(Entidad.class, id);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IEntityDao#update(dominio.Entidad)
+	 */
     public void update(Entidad entity) throws DataAccessLayerException {
         super.update(entity);
     }
 
+    /* (non-Javadoc)
+	 * @see persistence.daos.IEntityDao#findAll()
+	 */
     @SuppressWarnings("unchecked")
     public List<Entidad> findAll() throws DataAccessLayerException {
         return super.findAll(Entidad.class);
     }
+    /* (non-Javadoc)
+	 * @see persistence.daos.IEntityDao#findByNombre(java.lang.String)
+	 */
     @SuppressWarnings("unchecked")
     public Entidad findByNombre(String nombre) throws DataAccessLayerException {
     	Entidad unCanal = null;
