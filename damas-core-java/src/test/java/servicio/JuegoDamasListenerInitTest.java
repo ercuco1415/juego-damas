@@ -2,14 +2,15 @@ package servicio;
 
 import org.junit.Test;
 
-import servicios.JuegoDamasListener;
+import servicios.IJuegoDamasListener;
+import servicios.utils.ServiceLocator;
 import excepciones.NoHayFichaEnCasilleroException;
 
 public class JuegoDamasListenerInitTest {
 
 	@Test
 	public void inicio() throws NoHayFichaEnCasilleroException {
-		JuegoDamasListener damasListener =  new JuegoDamasListener();
+		IJuegoDamasListener damasListener =  (IJuegoDamasListener) ServiceLocator.getInstance().getService(IJuegoDamasListener.class);
 		damasListener.init();
 		
 	}

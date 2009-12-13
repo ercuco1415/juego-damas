@@ -3,6 +3,8 @@ package persistence.daos;
 import org.junit.Before;
 import org.junit.Test;
 
+import servicios.utils.ServiceLocator;
+
 import dominio.Ficha;
 import dominio.Humano;
 import dominio.Jugador;
@@ -23,10 +25,10 @@ public class JugadorDaoTest {
 	@Test
 	public void testCrea(){
 		
-		TableroDao tableroDao = new TableroDao();
+		ITableroDao tableroDao = (ITableroDao) ServiceLocator.getInstance().getService(ITableroDao.class);
 		Tablero tablero = tableroDao.findAll().iterator().next();
 		
-		JugadorDao daoJugador = new JugadorDao();
+		IJugadorDao daoJugador =(IJugadorDao) ServiceLocator.getInstance().getService(IJugadorDao.class);
 		
 		Jugador jugador= new Humano();
 		jugador.poneFichas(tablero.getNegros());
