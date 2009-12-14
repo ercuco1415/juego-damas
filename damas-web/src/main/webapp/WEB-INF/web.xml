@@ -10,9 +10,7 @@
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>
-		 /WEB-INF/spring-servlet.xml  
-		</param-value>
+		<param-value>/WEB-INF/spring-servlet.xml</param-value>
 	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -34,7 +32,7 @@
 
 	<servlet>
 		<servlet-name>dwr-invoker</servlet-name>
-		<display-name>DWR Servlet</display-name>
+		
 		<servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
 		<init-param>
 			<param-name>debug</param-name>

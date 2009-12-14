@@ -8,25 +8,19 @@
         http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
 
 	<!-- Mapping de URL -->
-	<bean id="urlMapping" class="net.agweb.web.CustomControllerClassNameHandlerMapping">
-		<property name="interceptors">
-			<list>
-				<ref bean="localeChangeInterceptor" />
-				<ref bean="valangInterceptor" />
-			</list>
-		</property>
-	</bean>
-
-	<!-- View resolver -->
+	<!--
+		<bean id="urlMapping"
+		class="net.agweb.web.CustomControllerClassNameHandlerMapping">
+		<property name="interceptors"> <list> <ref
+		bean="localeChangeInterceptor" /> <ref bean="valangInterceptor" />
+		</list> </property> </bean>
+	--><!-- View resolver -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass">
-			<value>org.springframework.web.servlet.view.JstlView</value>
-		</property>
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
 		<property name="prefix" value="/WEB-INF/jsp/" />
-		<property name="suffix">
-			<value>.jsp</value>
-		</property>
+		<property name="suffix" value=".jsp" />
 	</bean>
 	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
 		<property name="customEditors">
@@ -72,14 +66,19 @@
 	</bean>
 	<bean id="valangInterceptor"
 		class="org.springmodules.validation.valang.javascript.taglib.ValangRulesExportInterceptor" />
-
-	<!-- Home -->
-	<bean name="home" class="net.agweb.web.fg.home.IndexController" />
-	<bean name="applet" class="net.agweb.web.fg.home.AppletController" />
-	<bean name="login" class="net.agweb.web.fg.usuarios.LoginController">
+	<bean name="login" class="net.agweb.web.fg.usuarios.LoginController" />
+	<bean id="urlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/home/index.htm">init</prop>
+				<prop key="/home/movida.htm">movida</prop>
+			</props>
+		</property>
 	</bean>
-	
-	
+
+	<bean name="init" class="net.agweb.web.fg.home.InitController"/>
+	<bean name="movida" class="net.agweb.web.fg.home.MovidaController"/>
 
 </beans> 
 		
