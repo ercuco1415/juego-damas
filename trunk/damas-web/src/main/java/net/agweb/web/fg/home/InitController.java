@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import servicios.IJuegoDamasListener;
+import servicios.JuegoDamasListener;
 import servicios.utils.ServiceLocator;
 
 /**

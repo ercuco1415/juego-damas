@@ -1,7 +1,7 @@
 
 <dwr>
   <allow>
-    <create creator="new" javascript="JuegoDamas">
+    <create creator="new" javascript="DamasListener">
       <param name="class" value="servicios.JuegoDamasListener"/>
     </create>
     
