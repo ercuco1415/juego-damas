@@ -1,6 +1,9 @@
 package servicios;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import persistence.utils.UtilDBInitializer;
@@ -13,6 +16,7 @@ import dominio.FichaNegra;
 import dominio.Humano;
 import dominio.Jugador;
 import dominio.Maquina;
+import dominio.Partido;
 import dominio.Tablero;
 import excepciones.CasilleroOcupadoException;
 import excepciones.FormatoCasilleroException;
@@ -49,13 +53,18 @@ public class JuegoDamasListener implements IJuegoDamasListener {
 	public void inizializarBase(){
 		UtilDBInitializer.initDropCreate();
 	}
-	public void init() {
+	public void inicializar(String tiempo) {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		System.out.println("INICIO DE JUEGO");
-		inizializarBase();
-		inicializarJugada();
+//		inizializarBase();
+		try {
+			inicializarJugada(sdf.parse(tiempo));
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 		System.out.println("INICIO DE JUEGO");
 	}
-	public void inicializarJugada(){
+	public void inicializarJugada(Date date){
 		Tablero tablero = new Tablero();
 		Jugador jugadorMaquina = new Maquina();
 		Jugador jugadorHumano = new Humano();
@@ -69,6 +78,15 @@ public class JuegoDamasListener implements IJuegoDamasListener {
 		jugadorMaquina.tenesTurno();
 		getObjectPersistenceService().guarda(jugadorHumano);
 		getObjectPersistenceService().guarda(jugadorMaquina);
+		
+		Partido partido = new Partido();
+		partido.setTablero(tablero);
+		partido.setHumano(jugadorHumano);
+		partido.setMaquina(jugadorMaquina);
+		partido.setInicioJuego(date);
+		partido.setInicioJugada(date);
+		partido.generateNombre();
+		getObjectPersistenceService().guarda(partido);
 	}
 	public boolean moveFicha(String fichaStr, String casilleroStr) throws NoHayFichaEnCasilleroException, FormatoCasilleroException,
 			CasilleroOcupadoException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException {
@@ -155,6 +173,10 @@ public class JuegoDamasListener implements IJuegoDamasListener {
 	public List<CasilleroNegro> dameCasillerosNegros() {
 		Tablero tablero =getObjectPersistenceService().obtenerTablero();
 		return tablero.getNegros();
+	}
+	public Partido damePartido(String idEntity) {
+		Partido partido =getObjectPersistenceService().obtenerPartido(idEntity);
+		return partido;
 	}
 	/* (non-Javadoc)
 	 * @see servicios.IJuegoDamasListener#dameFichasNegras()

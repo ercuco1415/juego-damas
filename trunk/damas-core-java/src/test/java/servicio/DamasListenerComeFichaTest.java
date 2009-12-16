@@ -1,5 +1,7 @@
 package servicio;
 
+import java.util.Date;
+
 import org.junit.Test;
 
 import servicios.IJuegoDamasListener;
@@ -16,7 +18,7 @@ public class DamasListenerComeFichaTest {
 	@Test
 	public void testComeFicha() throws NoHayFichaEnCasilleroException, FormatoCasilleroException, CasilleroOcupadoException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException {
 		IJuegoDamasListener damasListener =  (IJuegoDamasListener) ServiceLocator.getInstance().getService(IJuegoDamasListener.class);
-		damasListener.init();
+		damasListener.inicializar("05:30");
 		System.out.println(damasListener.dameCasillerosDisponibles("fn13").toString());
 		
 		damasListener.moveFicha("fb11", "x10y7");
