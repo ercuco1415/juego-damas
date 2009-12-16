@@ -2,6 +2,8 @@ package servicio;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Date;
+
 import org.junit.Test;
 
 import servicios.IJuegoDamasListener;
@@ -18,7 +20,7 @@ public class DamasListenerMoveFichaTest {
 	@Test
 	public void testDameCasillerosDisponibles() throws NoHayFichaEnCasilleroException, FormatoCasilleroException, CasilleroOcupadoException, NoExisteCasilleroDisponibleException, NoTieneFichaContrarioException, NoPuedoComerFichaException {
 		IJuegoDamasListener damasListener =  (IJuegoDamasListener) ServiceLocator.getInstance().getService(IJuegoDamasListener.class);
-		damasListener.init();
+		damasListener.inicializar("05:30");
 		String antes = damasListener.dameCasillerosDisponibles("fn13").toString();
 		damasListener.moveFicha("fn13", "x5y4");
 		assertEquals("[x6y5, x4y5]",damasListener.dameCasillerosDisponibles("fn13").toString());

@@ -74,6 +74,17 @@
 				<one-to-many class="dominio.CasilleroNegro"/>
 			</list>
 		</joined-subclass>
+		<joined-subclass lazy="true" name="dominio.Partido" table="PARTIDO">
+			<key column="ID_PARTIDO"/>
+			<property name="nombre"  type="java.lang.String" update="true" insert="true" access="property" column="S_NOMBRE"/>
+			<property name="cantMovidasRealizadasMaquina"   type="int" update="true" insert="true" access="property" column="N_CANT_MOVIDAS_MAQ"/>
+        	<property name="cantMovidasRealizadasSinComerMaquina"   type="int" update="true" insert="true" access="property" column="N_CANT_MOVIDAS_SIN_COMER"/>
+        	<property name="inicioJuego"  type="java.util.Date" update="true" insert="true" access="property" column="D_INICIO_JUEGO"/>
+			<property name="inicioJugada" type="java.util.Date" update="true" insert="true" access="property" column="D_INICIO_JUGADA"/>
+        	<many-to-one name="humano" class="dominio.Humano" column="ID_HUMANO"    cascade="none" foreign-key="FK_ID_JUGADOR" lazy="false"/>
+        	<many-to-one name="maquina" class="dominio.Maquina" column="ID_MAQUINA"  cascade="none" foreign-key="FK_ID_JUGADOR" lazy="false"/>
+        	
+		</joined-subclass>
     </class>
 
 </hibernate-mapping>

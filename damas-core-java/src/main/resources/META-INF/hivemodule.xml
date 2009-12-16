@@ -40,5 +40,10 @@
 			<construct class="persistence.daos.JugadorDao"/>
 		</invoke-factory>
 	</service-point>
+	<service-point id="partidoDao" interface="persistence.daos.IPartidoDao">
+		<invoke-factory>
+			<construct class="persistence.daos.PartidoDao"/>
+		</invoke-factory>
+	</service-point>
 	
 </module>

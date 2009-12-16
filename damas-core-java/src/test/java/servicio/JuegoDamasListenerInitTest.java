@@ -11,7 +11,7 @@ public class JuegoDamasListenerInitTest {
 	@Test
 	public void inicio() throws NoHayFichaEnCasilleroException {
 		IJuegoDamasListener damasListener =  (IJuegoDamasListener) ServiceLocator.getInstance().getService(IJuegoDamasListener.class);
-		damasListener.init();
+		damasListener.inicializar("00:30:31");
 		
 	}
 

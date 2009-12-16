@@ -4,6 +4,7 @@ import java.util.List;
 
 import dominio.CasilleroNegro;
 import dominio.Ficha;
+import dominio.Partido;
 import excepciones.CasilleroOcupadoException;
 import excepciones.FormatoCasilleroException;
 import excepciones.NoExisteCasilleroDisponibleException;
@@ -13,7 +14,7 @@ import excepciones.NoTieneFichaContrarioException;
 
 public interface IJuegoDamasListener {
 
-	public abstract void init();
+	public abstract void inicializar(String tiempo);
 
 	public abstract boolean moveFicha(String fichaStr, String casilleroStr)
 			throws NoHayFichaEnCasilleroException, FormatoCasilleroException,
@@ -31,5 +32,7 @@ public interface IJuegoDamasListener {
 	public abstract List<CasilleroNegro> dameCasillerosNegros();
 
 	public abstract List<Ficha> dameFichasNegras();
+	
+	public abstract Partido damePartido(String idEntity) ;
 
 }
