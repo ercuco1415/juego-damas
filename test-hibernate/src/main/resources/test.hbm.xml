@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="seguridad.Usuario" table="USUARIO" lazy="false" >
+        <id	name="id"	column="ID_USUARIO"	type="java.lang.Long" >
+            <generator class="native">
+            </generator>
+        </id>
+		<property name="username"  type="java.lang.String" update="true" insert="true" access="property" column="S_USERNAME"/>
+		<property name="password"  type="java.lang.String" update="true" insert="true" access="property" column="S_PASSWORD"/>
+<!--		<list name="perfiles" lazy="false"  cascade="all" table="PERFILES_USUARIO" >-->
+<!--	            <key column="ID_PERFIL" />-->
+<!--				<index column="N_INDEX"/>-->
+<!--				<composite-element class="seguridad.Perfil">-->
+<!--					<property name="nombre" access="field" column="s_nombre" insert="true" update="true"/>-->
+<!--					<property name="recurso" access="field" column="s_recurso" insert="true" update="true"/>-->
+<!--				</composite-element>-->
+<!--        </list>-->
+        <set name="perfiles" lazy="false"  cascade="all" table="PERFILES_USUARIO" >
+	            <key column="ID_PERFIL" />
+				<composite-element class="seguridad.Perfil">
+					<property name="nombre" access="field" column="s_nombre" insert="true" update="true"/>
+					<property name="recurso" access="field" column="s_recurso" insert="true" update="true"/>
+				</composite-element>
+        </set>
+	</class>		
+</hibernate-mapping>
