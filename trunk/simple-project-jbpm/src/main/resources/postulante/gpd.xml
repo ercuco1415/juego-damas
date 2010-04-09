@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root-container name="postulante" width="837" height="357">
+  <node name="start" x="87" y="111" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
+  <node name="end-state1" x="543" y="180" width="132" height="36"/>
+  <node name="ALTA" x="318" y="69" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+    <edge>
+      <label x="5" y="-10"/>
+      <bendpoint w1="-75" h1="-50" w2="-75" h2="-50"/>
+      <bendpoint w1="-27" h1="-67" w2="-27" h2="-67"/>
+    </edge>
+  </node>
+  <node name="BAJA" x="265" y="186" width="132" height="36">
+    <edge>
+      <label x="-22" y="-12"/>
+    </edge>
+  </node>
+</root-container>

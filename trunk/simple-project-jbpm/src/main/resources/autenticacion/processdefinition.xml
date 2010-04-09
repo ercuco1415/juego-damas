@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition  xmlns=""  name="autenticacion">
+
+
+	<start-state name="start">
+		<transition to="ACTIVO" name="CREATE"></transition>
+	</start-state>
+
+
+	<state name="ACTIVO">
+		<transition to="INACTIVO" name="DESHABILITADO"></transition>
+		<transition to="BLOQUEADO" name="BLOQUEO"></transition>
+	</state>
+
+	<state name="INACTIVO">
+		<transition to="end" name="CADUCO"></transition>
+	</state>
+
+	<state name="BLOQUEADO">
+		<transition to="ACTIVO" name="DESBLOQUEO"></transition>
+	</state>
+
+
+	<end-state name="end"></end-state>
+
+
+</process-definition>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition  xmlns=""  name="solicitud">
+
+
+	<start-state name="start">
+		<transition to="INICIADA" name="CREATE"></transition>
+	</start-state>
+
+
+	<state name="INICIADA">
+		<transition to="end" name="BAJA"></transition>
+		<transition to="PENDIENTE_PROPICIANTE" name="FINALIZA_CARGA"></transition>
+	</state>
+
+	<state name="PENDIENTE_PROPICIANTE">
+		<transition to="RECHAZADA_PROPICIANTE" name="RECHAZADA"></transition>
+		<transition to="ACEPTADA_PROPICIANTE" name="ACEPTADA"></transition>
+	</state>
+
+	<state name="RECHAZADA_PROPICIANTE">
+		<transition to="end" name="ANULADA"></transition>
+	</state>
+
+	<state name="ACEPTADA_PROPICIANTE">
+		<transition to="PENDIENTE_FIRMA" name="ESPERA_FIRMA"></transition>
+	</state>
+
+	<state name="PENDIENTE_FIRMA">
+		<transition to="FIRMADA_POSTULANTE" name="FIRMADA"></transition>
+	</state>
+
+	<state name="FIRMADA_POSTULANTE">
+		<transition to="end" name="CHEQUEADA"></transition>
+	</state>
+
+
+	<end-state name="end"></end-state>
+
+
+</process-definition>
