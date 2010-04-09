@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition  xmlns=""  name="postulante">
+
+
+	<start-state name="start">
+		<transition to="ALTA" name="CREATE"></transition>
+	</start-state>
+
+
+	<state name="ALTA">
+		<transition to="BAJA" name="ELIMINADO"></transition>
+		<transition to="ALTA" name="MODIFICACION"></transition>
+	</state>
+
+	<state name="BAJA">
+		<transition to="end-state1" name="CONFIRMADA"></transition>
+	</state>
+
+
+	<end-state name="end-state1"></end-state>
+
+
+</process-definition>
