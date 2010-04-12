@@ -1,0 +1,38 @@
+<zk>
+	
+	<window width="800px" id="postulacionWin"
+	 apply="postulacion.composers.BuzonComposer">
+		<tablelayout columns="2">
+		<tablechildren>
+			<panel  title="Session" border="normal" >
+			 	<panelchildren >
+					<hbox pack="start" align="end">
+						<label id="usernameLbl"/>
+						<button id="logoutButton" label="cerrar" forward="onClick=onLogout"></button>
+					</hbox>
+			 	</panelchildren>
+			 </panel>
+			 <panel title="Ayuda" border="normal"></panel>
+		</tablechildren>
+		</tablelayout>
+		<listbox id="postulacionesLBox" selectedItem="@{postulacionWin$BuzonComposer.showSelection}" rows="8" >
+		 	<listhead sizable="true">
+		       <listheader width="100px" label="Solicitud Nro"/>
+		       <listheader width="150px" label="Asunto"/>
+		       <listheader width="150px" label="Estado"/>
+		       <listheader width="100px"  label="vencimiento"/>
+		       <listheader width="100px"  label="accion" />
+		     </listhead>
+		     <listitem self="@{each='itemPostulacion'}">
+				<listcell label="@{itemPostulacion.solicitudNro}" />
+				<listcell label="@{itemPostulacion.asunto}" />
+				<listcell label="@{itemPostulacion.estado}" />
+				<listcell label="@{itemPostulacion.vencimiento}" />
+				<listcell label="@{itemPostulacion.accion}" />
+			</listitem>
+		</listbox>
+		<label id="info"/>
+	</window>
+</zk>
+
+			
