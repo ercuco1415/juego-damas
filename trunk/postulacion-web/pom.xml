@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>postulacion.web</groupId>
+  <artifactId>postulacion-web</artifactId>
+  <packaging>war</packaging>
+  <version>1.0</version>
+  <name>postulacion web</name>
+  <url>http://maven.apache.org</url>
+  <repositories>
+  		<repository>
+			<id>repo1.maven.org</id>
+			<name>repo1.maven.org</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>ibiblio.org</id>
+			<name>ibiblio.org</name>
+			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
+		</repository>
+		<repository>
+			<id>com.springsource.repository.bundles.release</id>
+			<name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
+			<url>http://repository.springsource.com/maven/bundles/release</url>
+		</repository>
+		<repository>
+			<id>com.springsource.repository.bundles.external</id>
+			<name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+			<url>http://repository.springsource.com/maven/bundles/external</url>
+		</repository> 
+	    <repository>
+			<id>uface.m2</id>
+			<url>http://uface.googlecode.com/svn/maven/</url>
+	    </repository>
+	    <repository>
+			<id>nexus.openqa.org</id>
+			<url>http://nexus.openqa.org/content/repositories/central/</url>
+	    </repository>
+  </repositories>
+  
+  <build>
+  	<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+    <defaultGoal>package</defaultGoal>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>${resources.location}</directory>
+      </resource>
+    </resources>
+    <finalName>${artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.0</version>
+        <configuration>
+          <webXml>${basedir}/src/main/webapp/WEB-INF/web.xml</webXml>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <properties>
+    <maven.test.skip>true</maven.test.skip>
+    <spring-release-version>2.5.2</spring-release-version>
+  </properties>
+</project>

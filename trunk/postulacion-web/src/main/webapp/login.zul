@@ -1,0 +1,38 @@
+<zk>
+	<window border="normal" width="800px" apply="postulacion.composers.LoginComposer" >
+	<tablelayout columns="3">
+	<tablechildren>
+		<panel  title="Login" border="normal">
+		 	<panelchildren>
+			 	<vbox>
+					<hbox>
+						<label id="usuarioLbl" value="Usuario"/>
+						<textbox  id="usernameTxt" />
+					</hbox>
+					<hbox>
+						<label id="pwdLbl" value="Clave"/>	
+						<textbox type="password" id="passwordTxt" />
+					</hbox>
+		
+					<hbox>
+						<button label="Login" id="loginButton" forward="onClick=onLogin" />
+					</hbox>
+				</vbox>
+				<div>
+					<label id="msgLbl" style="color:red"/>
+				</div>
+		 	</panelchildren>
+		 </panel>
+		<panel title="Atencion Consultas" border="normal">
+			<panelchildren>
+				<image src="canvas.png"></image>
+			</panelchildren>
+		</panel>
+		 
+		 <panel title="Ayuda" border="normal"></panel>
+	</tablechildren>
+	
+	</tablelayout>
+		
+	</window>
+</zk>
